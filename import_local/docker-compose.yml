@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:15
+    container_name: see_postgres
+    environment:
+      POSTGRES_DB: see_db
+      POSTGRES_USER: see_user
+      POSTGRES_PASSWORD: see_pass_2026
+    volumes:
+      - ./see_db_dump.sql:/docker-entrypoint-initdb.d/01_see_db_dump.sql:ro
+      - see_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"   # Postgres accesible en tu Mac por localhost:5433
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U see_user -d see_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  grafana:
+    image: grafana/grafana-oss:13.1.0
+    container_name: see_grafana
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: SEE_admin_2026
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Editor
+      GF_USERS_DEFAULT_LANGUAGE: es-ES
+      GF_USERS_DEFAULT_THEME: dark
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      SEE_PG_URL: db:5432
+    volumes:
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3001:3000"   # Grafana del proyecto en http://localhost:3001  (no choca con tu Grafana en 3000)
+
+volumes:
+  see_pgdata:
