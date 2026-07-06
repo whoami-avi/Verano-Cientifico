@@ -21,6 +21,22 @@ import_local/
 
 ---
 
+## 🚀 LA FORMA MÁS RÁPIDA — Script automático
+
+Requisito: *Docker Desktop* instalado. Solo abre la Terminal y ejecuta:
+```bash
+cd ruta/al/proyecto/import_local
+./importar.sh
+```
+El script verifica Docker, levanta todo, espera a que Grafana esté lista y **abre el
+navegador automáticamente** en http://localhost:3001. Para detener: `./detener.sh`.
+
+(Si tu Mac no deja ejecutarlo, corre antes: `chmod +x importar.sh detener.sh`.)
+
+---
+
+---
+
 ## OPCIÓN A — Todo automático con Docker (RECOMENDADA) ✅
 
 Levanta una base PostgreSQL con los datos + una segunda Grafana ya lista, en un solo
