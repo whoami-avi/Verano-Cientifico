@@ -37,7 +37,7 @@
     {
       "id": 1,
       "type": "barchart",
-      "title": "Top 15 Puestos: Competencias Requeridas vs Logradas",
+      "title": "Top 15 Puestos: Competencias Logradas vs Brechas (apiladas = requeridas)",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -51,7 +51,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.puesto, count(*) AS \"Requeridas\", sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.puesto ORDER BY \"Requeridas\" DESC LIMIT 15",
+          "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.puesto, sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"Brechas\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.puesto ORDER BY count(*) DESC LIMIT 15",
           "editorMode": "code",
           "rawQuery": true
         }
@@ -68,7 +68,7 @@
             "gradientMode": "hue",
             "axisPlacement": "auto",
             "stacking": {
-              "mode": "none",
+              "mode": "normal",
               "group": "A"
             }
           }
@@ -78,7 +78,7 @@
       "options": {
         "orientation": "vertical",
         "showValue": "auto",
-        "stacking": "none",
+        "stacking": "normal",
         "xTickLabelRotation": -45,
         "xTickLabelSpacing": 100,
         "legend": {

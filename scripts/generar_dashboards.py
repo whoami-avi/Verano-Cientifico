@@ -120,6 +120,27 @@ def table(pid, title, sql, desc="", color_cols=None):
                     "sortBy": []},
     }
 
+def calendar_panel(pid, title, sql, desc=""):
+    return {
+        "id": pid, "type": "marcusolsson-calendar-panel", "title": title, "description": desc,
+        "datasource": DS, "targets": [tgt(sql)],
+        "options": {"autoScroll": True, "colors": "frame", "displayTime": True,
+                    "defaultView": "month", "textField": "name",
+                    "timeField": "start_time", "endTimeField": "end_time", "quickLinks": False},
+        "fieldConfig": {"defaults": {"custom": {}}, "overrides": []},
+    }
+
+def gantt_panel(pid, title, sql, desc=""):
+    return {
+        "id": pid, "type": "marcusolsson-gantt-panel", "title": title, "description": desc,
+        "datasource": DS, "targets": [tgt(sql)],
+        "options": {"colorField": "estatus", "labelFields": ["curso"], "textField": "curso",
+                    "startField": "start_time", "endField": "end_time",
+                    "groupByField": "departamento", "showYAxis": True,
+                    "sortBy": "startTime", "sortOrder": "asc"},
+        "fieldConfig": {"defaults": {"custom": {}}, "overrides": []},
+    }
+
 def text_panel(pid, title, content):
     return {"id": pid, "type": "text", "title": title,
             "options": {"mode": "markdown", "content": content}, "transparent": False}
@@ -261,11 +282,11 @@ open(f"{OUT}/02_planta.json", "w").write(json.dumps(dash, indent=2))
 # 03 - COMPETENCIAS POR PUESTO (Requeridas vs Logradas)
 # =====================================================================
 p = []
-p.append((barchart(1, "Top 15 Puestos: Competencias Requeridas vs Logradas",
-    f"{ULT} SELECT pu.puesto, count(*) AS \"Requeridas\", "
-    "sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\" "
+p.append((barchart(1, "Top 15 Puestos: Competencias Logradas vs Brechas (apiladas = requeridas)",
+    f"{ULT} SELECT pu.puesto, sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\", "
+    "sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"Brechas\" "
     "FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto "
-    "GROUP BY pu.puesto ORDER BY \"Requeridas\" DESC LIMIT 15", stacked=False), 24, 11))
+    "GROUP BY pu.puesto ORDER BY count(*) DESC LIMIT 15", stacked=True), 24, 11))
 p.append((barchart(2, "Cumplimiento por Clasificacion de Puesto (%)",
     f"{ULT} SELECT pu.clasificacion, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/"
     "nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj "
@@ -326,6 +347,14 @@ open(f"{OUT}/05_ddn.json", "w").write(json.dumps(dash, indent=2))
 # 06 - PLAN MAESTRO DE ENTRENAMIENTO
 # =====================================================================
 p = []
+p.append((gantt_panel(8, "Gantt - Cursos del Plan Maestro (2026)",
+    "SELECT c.nombre_curso AS curso, cpr.fecha_inicio::timestamp AS start_time, "
+    "cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus, d.departamento AS departamento "
+    "FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso "
+    "JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro "
+    "JOIN departamentos d ON pm.id_departamento=d.id_departamento "
+    "WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 60",
+    desc="Cronograma tipo Gantt de los cursos programados"), 24, 11))
 p.append((piechart(1, "Estatus de Cursos Programados",
     "SELECT estatus AS metric, count(*) AS value FROM cursos_programados GROUP BY estatus", donut=True), 8, 9))
 p.append((stat(2, "Planes Maestros Registrados", "SELECT count(*) FROM plan_maestro", "short", 0,
@@ -361,6 +390,12 @@ open(f"{OUT}/06_plan_maestro.json", "w").write(json.dumps(dash, indent=2))
 # 07 - CURSOS PROGRAMADOS (Calendario anual)
 # =====================================================================
 p = []
+p.append((calendar_panel(8, "Calendario Anual de Cursos (2026)",
+    "SELECT c.nombre_curso AS name, cpr.fecha_inicio::timestamp AS start_time, "
+    "cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus "
+    "FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso "
+    "WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio",
+    desc="Vista de calendario de los cursos programados"), 24, 12))
 p.append((barchart(1, "Cursos Programados por Semana (2026)",
     "SELECT semana AS \"Semana\", count(*) AS \"Cursos\" FROM cursos_programados WHERE anio_fiscal=2026 "
     "GROUP BY semana ORDER BY semana", legend=False), 24, 9))

@@ -32,6 +32,7 @@ services:
       GF_USERS_DEFAULT_THEME: dark
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_INSTALL_PLUGINS: marcusolsson-calendar-panel,marcusolsson-gantt-panel
       SEE_PG_URL: db:5432
     volumes:
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources:ro

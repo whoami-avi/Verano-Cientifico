@@ -35,6 +35,51 @@
   },
   "panels": [
     {
+      "id": 8,
+      "type": "marcusolsson-calendar-panel",
+      "title": "Calendario Anual de Cursos (2026)",
+      "description": "Vista de calendario de los cursos programados",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "see_pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "see_pg"
+          },
+          "rawSql": "SELECT c.nombre_curso AS name, cpr.fecha_inicio::timestamp AS start_time, cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio",
+          "editorMode": "code",
+          "rawQuery": true
+        }
+      ],
+      "options": {
+        "autoScroll": true,
+        "colors": "frame",
+        "displayTime": true,
+        "defaultView": "month",
+        "textField": "name",
+        "timeField": "start_time",
+        "endTimeField": "end_time",
+        "quickLinks": false
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
       "id": 1,
       "type": "barchart",
       "title": "Cursos Programados por Semana (2026)",
@@ -94,7 +139,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 12
       }
     },
     {
@@ -157,7 +202,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 21
       }
     },
     {
@@ -220,7 +265,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 21
       }
     },
     {
@@ -272,7 +317,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 29
       }
     }
   ],
