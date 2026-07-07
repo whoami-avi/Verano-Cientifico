@@ -1,6 +1,6 @@
 {
   "uid": "see-ejecutivo",
-  "title": "00 - Dashboard Ejecutivo",
+  "title": "01. Dashboard Ejecutivo",
   "tags": [
     "see",
     "ejecutivo"
@@ -599,7 +599,7 @@
     {
       "id": 9,
       "type": "piechart",
-      "title": "Diagnostico: Competente vs No Competente",
+      "title": "Diagn\u00f3stico: Competente vs No Competente",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -613,7 +613,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
+          "rawSql": "SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS \"Competente\", max(CASE WHEN estado='No competente' THEN empleados END) AS \"No competente\" FROM rep_ddn",
           "editorMode": "code",
           "rawQuery": true
         }

@@ -15,7 +15,8 @@ CONN = dict(host="127.0.0.1", dbname="see_db", user="see_user", password="see_pa
 SCHEMA = """
 DROP TABLE IF EXISTS cursos_participantes, cursos_programados, plan_maestro,
     cursos, diagnosticos, competencias_puesto, descripciones_puesto, empleados,
-    puestos, areas, departamentos, plantas, accesos_diarios, metricas_productividad CASCADE;
+    puestos, areas, departamentos, plantas, accesos_diarios, metricas_productividad,
+    rep_competencias, rep_brechas, rep_ddn CASCADE;
 
 CREATE TABLE plantas (
     clave_planta   INT PRIMARY KEY,
@@ -121,6 +122,20 @@ CREATE TABLE metricas_productividad (
     proceso         TEXT PRIMARY KEY,
     tiempo_antes_min INT,
     tiempo_despues_min INT
+);
+-- Tablas con las cifras EXACTAS del documento "simulador G2" (datos oficiales del reporte)
+CREATE TABLE rep_competencias (
+    competencia     TEXT PRIMARY KEY,
+    requeridas      INT,
+    cumplidas       INT
+);
+CREATE TABLE rep_brechas (
+    departamento    TEXT PRIMARY KEY,
+    faltantes       INT
+);
+CREATE TABLE rep_ddn (
+    estado          TEXT PRIMARY KEY,
+    empleados       INT
 );
 """
 
@@ -298,7 +313,7 @@ def main():
             evaluaciones = random.randint(1, 2)
             for ev in range(evaluaciones):
                 did_seq += 1
-                competente = random.random() > 0.28  # ~72% competentes
+                competente = random.random() > 0.07  # ~93% competentes (doc: 558/600)
                 prioridad = random.choices(PRIORIDADES, weights=[0.3, 0.45, 0.25])[0]
                 freg = hoy - timedelta(days=random.randint(1, 365 * 3))
                 venc = freg + timedelta(days=random.choice([365, 730]))
@@ -382,6 +397,15 @@ def main():
         ("Firmar documentos (flujo completo)", 4320, 240),
     ]
     execute_values(cur, "INSERT INTO metricas_productividad VALUES %s", prod)
+
+    # Cifras EXACTAS del documento simulador G2
+    execute_values(cur, "INSERT INTO rep_competencias VALUES %s", [
+        ("Seguridad", 600, 596), ("Calidad", 600, 589), ("Manufactura", 580, 545),
+        ("Lean Manufacturing", 420, 381), ("IATF 16949", 400, 360), ("ISO 9001", 400, 372)])
+    execute_values(cur, "INSERT INTO rep_brechas VALUES %s", [
+        ("Produccion", 25), ("Calidad", 8), ("Ingenieria", 12), ("RH", 3), ("Logistica", 6)])
+    execute_values(cur, "INSERT INTO rep_ddn VALUES %s", [
+        ("Competente", 558), ("No competente", 42)])
 
     conn.commit()
 

@@ -1,6 +1,6 @@
 {
   "uid": "see-comp-puesto",
-  "title": "03 - Competencias por Puesto",
+  "title": "04. Competencias por Puesto",
   "tags": [
     "see",
     "competencias"
@@ -34,6 +34,121 @@
     "list": []
   },
   "panels": [
+    {
+      "id": 10,
+      "type": "barchart",
+      "title": "Reporte de Competencias: Cumplidas vs Brecha (barras apiladas)",
+      "description": "Cifras oficiales del documento",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "see_pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "see_pg"
+          },
+          "rawSql": "SELECT competencia AS \"Competencia\", cumplidas AS \"Cumplidas\", (requeridas-cumplidas) AS \"Brecha\" FROM rep_competencias ORDER BY requeridas DESC",
+          "editorMode": "code",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "axisPlacement": "auto",
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "normal",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 100,
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Reporte de Competencias (Requeridas / Cumplidas / %)",
+      "description": "",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "see_pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "see_pg"
+          },
+          "rawSql": "SELECT competencia AS \"Competencia\", requeridas AS \"Requeridas\", cumplidas AS \"Cumplidas\", round(100.0*cumplidas/requeridas,0) AS \"% Cumplimiento\" FROM rep_competencias ORDER BY \"% Cumplimiento\" DESC",
+          "editorMode": "code",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      }
+    },
     {
       "id": 1,
       "type": "barchart",
@@ -94,7 +209,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 10
       }
     },
     {
@@ -157,7 +272,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 21
       }
     },
     {
@@ -227,7 +342,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 21
       }
     }
   ],

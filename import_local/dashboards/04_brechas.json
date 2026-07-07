@@ -1,6 +1,6 @@
 {
   "uid": "see-gaps",
-  "title": "04 - Brechas de Competencias",
+  "title": "05. Brechas de Competencias",
   "tags": [
     "see",
     "competencias"
@@ -34,6 +34,143 @@
     "list": []
   },
   "panels": [
+    {
+      "id": 10,
+      "type": "barchart",
+      "title": "Brechas de Competencias por Departamento (documento)",
+      "description": "Cifras oficiales del documento",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "see_pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "see_pg"
+          },
+          "rawSql": "SELECT departamento AS \"Departamento\", faltantes AS \"Competencias faltantes\" FROM rep_brechas ORDER BY faltantes DESC",
+          "editorMode": "code",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "axisPlacement": "auto",
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100,
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Reporte de Brechas (competencias faltantes)",
+      "description": "",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "see_pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "see_pg"
+          },
+          "rawSql": "SELECT departamento AS \"Departamento\", faltantes AS \"Competencias faltantes\" FROM rep_brechas ORDER BY faltantes DESC",
+          "editorMode": "code",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Competencias faltantes"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "gradient"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-YlRd"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      }
+    },
     {
       "id": 1,
       "type": "table",
@@ -210,7 +347,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 10
       }
     },
     {
@@ -273,7 +410,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 21
       }
     }
   ],

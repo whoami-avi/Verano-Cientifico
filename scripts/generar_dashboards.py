@@ -222,10 +222,9 @@ p.append((gauge(7, "Cumplimiento Global de Competencias",
 p.append((gauge(8, "Cumplimiento Plan Maestro",
                 "SELECT round(100.0*count(*) FILTER (WHERE estatus='Completado')/"
                 "nullif(count(*) FILTER (WHERE estatus<>'Cancelado'),0),1) FROM cursos_programados"), 6, 8))
-p.append((piechart(9, "Diagnostico: Competente vs No Competente",
-                   f"{ULT} SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", "
-                   f"sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" "
-                   f"FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE {FILT_E}"), 6, 8))
+p.append((piechart(9, "Diagnóstico: Competente vs No Competente",
+                   "SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS \"Competente\", "
+                   "max(CASE WHEN estado='No competente' THEN empleados END) AS \"No competente\" FROM rep_ddn"), 6, 8))
 p.append((barchart(10, "Cumplimiento por Departamento (%)",
                    f"{ULT} SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/"
                    f"nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj "
@@ -234,7 +233,7 @@ p.append((barchart(10, "Cumplimiento por Departamento (%)",
 p.append((timeseries(11, "Usuarios Activos del Sistema",
                      "SELECT fecha AS \"time\", usuarios_activos AS \"Usuarios activos\" "
                      "FROM accesos_diarios WHERE $__timeFilter(fecha) ORDER BY fecha"), 24, 7))
-dash = dashboard("see-ejecutivo", "00 - Dashboard Ejecutivo", ["see", "ejecutivo"],
+dash = dashboard("see-ejecutivo", "01. Dashboard Ejecutivo", ["see", "ejecutivo"],
                  layout(p), with_vars=True, refresh="")
 open(f"{OUT}/00_ejecutivo.json", "w").write(json.dumps(dash, indent=2))
 
@@ -254,7 +253,7 @@ p.append((table(2, "Detalle por Departamento",
     "round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS \"% Cumplimiento\" "
     "FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento "
     "GROUP BY d.departamento ORDER BY \"% Cumplimiento\" DESC", color_cols=["Brechas"]), 24, 11))
-dash = dashboard("see-dept", "01 - Cumplimiento por Departamento", ["see", "cumplimiento"], layout(p))
+dash = dashboard("see-dept", "02. Cumplimiento por Departamento", ["see", "cumplimiento"], layout(p))
 open(f"{OUT}/01_departamento.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -275,13 +274,20 @@ p.append((table(3, "Resumen por Planta",
     "round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS \"% Cumplimiento\" "
     "FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN plantas pl ON e.clave_planta=pl.clave_planta "
     "GROUP BY pl.planta, pl.ubicacion ORDER BY \"% Cumplimiento\" DESC"), 24, 8))
-dash = dashboard("see-planta", "02 - Cumplimiento por Planta", ["see", "cumplimiento"], layout(p))
+dash = dashboard("see-planta", "03. Cumplimiento por Planta", ["see", "cumplimiento"], layout(p))
 open(f"{OUT}/02_planta.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
 # 03 - COMPETENCIAS POR PUESTO (Requeridas vs Logradas)
 # =====================================================================
 p = []
+p.append((barchart(10, "Reporte de Competencias: Cumplidas vs Brecha (barras apiladas)",
+    "SELECT competencia AS \"Competencia\", cumplidas AS \"Cumplidas\", (requeridas-cumplidas) AS \"Brecha\" "
+    "FROM rep_competencias ORDER BY requeridas DESC", stacked=True,
+    desc="Cifras oficiales del documento"), 12, 10))
+p.append((table(11, "Reporte de Competencias (Requeridas / Cumplidas / %)",
+    "SELECT competencia AS \"Competencia\", requeridas AS \"Requeridas\", cumplidas AS \"Cumplidas\", "
+    "round(100.0*cumplidas/requeridas,0) AS \"% Cumplimiento\" FROM rep_competencias ORDER BY \"% Cumplimiento\" DESC"), 12, 10))
 p.append((barchart(1, "Top 15 Puestos: Competencias Logradas vs Brechas (apiladas = requeridas)",
     f"{ULT} SELECT pu.puesto, sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\", "
     "sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"Brechas\" "
@@ -294,7 +300,7 @@ p.append((barchart(2, "Cumplimiento por Clasificacion de Puesto (%)",
     horizontal=True, unit="percent"), 12, 9))
 p.append((piechart(3, "Competencias por Tipo",
     "SELECT tipo AS metric, count(*) AS value FROM competencias_puesto GROUP BY tipo", donut=True), 12, 9))
-dash = dashboard("see-comp-puesto", "03 - Competencias por Puesto", ["see", "competencias"], layout(p))
+dash = dashboard("see-comp-puesto", "04. Competencias por Puesto", ["see", "competencias"], layout(p))
 open(f"{OUT}/03_competencias_puesto.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -303,6 +309,13 @@ open(f"{OUT}/03_competencias_puesto.json", "w").write(json.dumps(dash, indent=2)
 tipos = ["Normativa", "Tecnica", "Operativa", "Blanda", "Administrativa"]
 filters = ", ".join([f"count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='{t}') AS \"{t}\"" for t in tipos])
 p = []
+p.append((barchart(10, "Brechas de Competencias por Departamento (documento)",
+    "SELECT departamento AS \"Departamento\", faltantes AS \"Competencias faltantes\" "
+    "FROM rep_brechas ORDER BY faltantes DESC", horizontal=True,
+    desc="Cifras oficiales del documento"), 12, 10))
+p.append((table(11, "Reporte de Brechas (competencias faltantes)",
+    "SELECT departamento AS \"Departamento\", faltantes AS \"Competencias faltantes\" "
+    "FROM rep_brechas ORDER BY faltantes DESC", color_cols=["Competencias faltantes"]), 12, 10))
 p.append((table(1, "Mapa de Calor de Brechas (No competentes por Departamento y Tipo)",
     f"{ULT} SELECT d.departamento AS \"Departamento\", {filters}, "
     "count(*) FILTER (WHERE NOT ult.competente) AS \"Total brechas\" "
@@ -314,7 +327,7 @@ p.append((barchart(2, "Top 15 Competencias con Mayor Brecha",
     f"{ULT} SELECT cp.descripcion_competencia, count(*) AS brechas FROM ult "
     "JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE NOT ult.competente "
     "GROUP BY cp.descripcion_competencia ORDER BY brechas DESC LIMIT 15", horizontal=True), 24, 12))
-dash = dashboard("see-gaps", "04 - Brechas de Competencias", ["see", "competencias"], layout(p))
+dash = dashboard("see-gaps", "05. Brechas de Competencias", ["see", "competencias"], layout(p))
 open(f"{OUT}/04_brechas.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -322,8 +335,8 @@ open(f"{OUT}/04_brechas.json", "w").write(json.dumps(dash, indent=2))
 # =====================================================================
 p = []
 p.append((piechart(1, "Competente vs No Competente",
-    f"{ULT} SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", "
-    "sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" FROM ult"), 8, 9))
+    "SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS \"Competente\", "
+    "max(CASE WHEN estado='No competente' THEN empleados END) AS \"No competente\" FROM rep_ddn"), 8, 9))
 p.append((piechart(2, "Brechas por Prioridad",
     f"{ULT} SELECT prioridad AS metric, count(*) AS value FROM ult WHERE NOT competente "
     "GROUP BY prioridad", donut=True), 8, 9))
@@ -340,7 +353,7 @@ p.append((table(5, "Diagnosticos Recientes",
     "di.fecha_registro AS \"Fecha\" FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj "
     "JOIN departamentos d ON em.id_departamento=d.id_departamento "
     "JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia ORDER BY di.fecha_registro DESC LIMIT 100"), 24, 10))
-dash = dashboard("see-ddn", "05 - Diagnostico de Necesidades (DDN)", ["see", "ddn"], layout(p))
+dash = dashboard("see-ddn", "06. Diagnóstico de Necesidades (DDN)", ["see", "ddn"], layout(p))
 open(f"{OUT}/05_ddn.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -383,7 +396,7 @@ p.append((table(7, "Plan Maestro por Departamento y Anio Fiscal",
     "CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS \"Firma Gerente\" "
     "FROM plan_maestro pm JOIN departamentos d ON pm.id_departamento=d.id_departamento "
     "ORDER BY pm.anio_fiscal DESC, d.departamento"), 24, 10))
-dash = dashboard("see-plan-maestro", "06 - Plan Maestro de Entrenamiento", ["see", "plan-maestro"], layout(p))
+dash = dashboard("see-plan-maestro", "07. Plan Maestro de Entrenamiento", ["see", "plan-maestro"], layout(p))
 open(f"{OUT}/06_plan_maestro.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -412,7 +425,7 @@ p.append((table(4, "Calendario de Cursos Proximos (2026)",
     "FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso "
     "WHERE cpr.anio_fiscal=2026 AND cpr.estatus IN ('Programado','En curso') "
     "ORDER BY cpr.fecha_inicio LIMIT 100"), 24, 10))
-dash = dashboard("see-cursos-prog", "07 - Cursos Programados", ["see", "plan-maestro"], layout(p))
+dash = dashboard("see-cursos-prog", "08. Cursos Programados", ["see", "plan-maestro"], layout(p))
 open(f"{OUT}/07_cursos_programados.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -438,7 +451,7 @@ p.append((table(5, "Registro de Evidencias Digitales",
     "FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj "
     "JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia "
     "WHERE di.ruta_evidencia IS NOT NULL ORDER BY di.fecha_registro DESC LIMIT 150"), 18, 12))
-dash = dashboard("see-evidencias", "08 - Evidencias Digitales", ["see", "auditoria"], layout(p))
+dash = dashboard("see-evidencias", "09. Evidencias Digitales", ["see", "auditoria"], layout(p))
 open(f"{OUT}/08_evidencias.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -468,7 +481,7 @@ p.append((table(6, "Estatus Normativo por Departamento",
     "JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento "
     "WHERE cp.tipo='Normativa' GROUP BY d.departamento ORDER BY \"% Competencias Normativas\"",
     color_cols=["Brechas Normativas"]), 12, 12))
-dash = dashboard("see-iatf", "09 - Metricas IATF 16949", ["see", "normativa", "iatf"], layout(p))
+dash = dashboard("see-iatf", "10. Indicadores IATF 16949", ["see", "normativa", "iatf"], layout(p))
 open(f"{OUT}/09_iatf.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -495,7 +508,7 @@ p.append((piechart(6, "Estatus Documental de DDP",
 p.append((timeseries(7, "Documentos Creados por Mes",
     "SELECT date_trunc('month', fecha_creacion)::date AS \"time\", count(*) AS \"DDP creadas\" "
     "FROM descripciones_puesto WHERE $__timeFilter(fecha_creacion) GROUP BY 1 ORDER BY 1"), 24, 8))
-dash = dashboard("see-iso", "10 - Metricas ISO 9001", ["see", "normativa", "iso"], layout(p))
+dash = dashboard("see-iso", "11. Indicadores ISO 9001", ["see", "normativa", "iso"], layout(p))
 open(f"{OUT}/10_iso.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -523,7 +536,7 @@ p.append((table(5, "Flujo de Firmas - Autorizaciones Recientes",
     "FROM descripciones_puesto dp JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto "
     "JOIN departamentos d ON dp.id_departamento=d.id_departamento ORDER BY dp.fecha_envio DESC LIMIT 100",
     color_cols=["Dias"]), 24, 11))
-dash = dashboard("see-autorizaciones", "11 - Seguimiento de Autorizaciones", ["see", "auditoria"], layout(p))
+dash = dashboard("see-autorizaciones", "12. Trazabilidad de Autorizaciones", ["see", "auditoria"], layout(p))
 open(f"{OUT}/11_autorizaciones.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -546,7 +559,7 @@ p.append((table(5, "Detalle de Productividad",
     "SELECT proceso AS \"Proceso\", tiempo_antes_min AS \"Antes (min)\", tiempo_despues_min AS \"Despues (min)\", "
     "round(100.0*(tiempo_antes_min - tiempo_despues_min)/nullif(tiempo_antes_min,0),1) AS \"% Reduccion\" "
     "FROM metricas_productividad ORDER BY \"% Reduccion\" DESC"), 8, 6))
-dash = dashboard("see-productividad", "12 - Productividad del Sistema", ["see", "productividad"], layout(p))
+dash = dashboard("see-productividad", "13. Productividad del Sistema", ["see", "productividad"], layout(p))
 open(f"{OUT}/12_productividad.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -572,7 +585,7 @@ p.append((table(5, "Checklist de Auditoria (DDP)",
     "dp.fecha_aprobacion AS \"Fecha Autorizacion\" FROM descripciones_puesto dp "
     "JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto JOIN departamentos d ON dp.id_departamento=d.id_departamento "
     "JOIN plantas pl ON dp.clave_planta=pl.clave_planta ORDER BY dp.autorizada, d.departamento LIMIT 150"), 24, 11))
-dash = dashboard("see-auditorias", "13 - Auditorias", ["see", "auditoria"], layout(p))
+dash = dashboard("see-auditorias", "14. Auditorías", ["see", "auditoria"], layout(p))
 open(f"{OUT}/13_auditorias.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -594,7 +607,7 @@ p.append((timeseries(4, "Usuarios Activos y Sesiones (Serie de Tiempo)",
 p.append((barchart(5, "Promedio de Usuarios Activos por Mes",
     "SELECT to_char(date_trunc('month', fecha),'YYYY-MM') AS \"Mes\", round(avg(usuarios_activos),0) AS \"Promedio\" "
     "FROM accesos_diarios WHERE fecha >= now() - interval '12 months' GROUP BY 1 ORDER BY 1", legend=False), 24, 8))
-dash = dashboard("see-usuarios", "14 - Usuarios Activos", ["see", "uso"], layout(p))
+dash = dashboard("see-usuarios", "15. Usuarios Activos", ["see", "uso"], layout(p))
 open(f"{OUT}/14_usuarios.json", "w").write(json.dumps(dash, indent=2))
 
 # =====================================================================
@@ -637,7 +650,7 @@ p.append((table(8, "Certificaciones Proximas a Vencer (siguientes 60 dias)",
     "JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia "
     "WHERE ult.competente AND ult.fecha_vencimiento BETWEEN now() AND now() + interval '60 days' "
     "ORDER BY ult.fecha_vencimiento LIMIT 100", color_cols=["Dias restantes"]), 24, 11))
-dash = dashboard("see-predictivo", "15 - Reportes Predictivos", ["see", "predictivo", "bi"], layout(p))
+dash = dashboard("see-predictivo", "16. Módulo de Reportes Predictivos", ["see", "predictivo", "bi"], layout(p))
 open(f"{OUT}/15_predictivo.json", "w").write(json.dumps(dash, indent=2))
 
 print("Dashboards generados en", OUT)

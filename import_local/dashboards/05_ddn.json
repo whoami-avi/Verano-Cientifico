@@ -1,6 +1,6 @@
 {
   "uid": "see-ddn",
-  "title": "05 - Diagnostico de Necesidades (DDN)",
+  "title": "06. Diagn\u00f3stico de Necesidades (DDN)",
   "tags": [
     "see",
     "ddn"
@@ -51,7 +51,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" FROM ult",
+          "rawSql": "SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS \"Competente\", max(CASE WHEN estado='No competente' THEN empleados END) AS \"No competente\" FROM rep_ddn",
           "editorMode": "code",
           "rawQuery": true
         }
