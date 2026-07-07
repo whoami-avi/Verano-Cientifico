@@ -360,14 +360,14 @@ open(f"{OUT}/05_ddn.json", "w").write(json.dumps(dash, indent=2))
 # 06 - PLAN MAESTRO DE ENTRENAMIENTO
 # =====================================================================
 p = []
-p.append((gantt_panel(8, "Gantt - Cursos del Plan Maestro (2026)",
-    "SELECT c.nombre_curso AS curso, cpr.fecha_inicio::timestamp AS start_time, "
-    "cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus, d.departamento AS departamento "
+p.append((table(8, "Cronograma de Cursos del Plan Maestro (2026)",
+    "SELECT d.departamento AS \"Departamento\", c.nombre_curso AS \"Curso\", cpr.semana AS \"Semana\", "
+    "cpr.fecha_inicio AS \"Inicio\", cpr.fecha_fin AS \"Fin\", cpr.estatus AS \"Estatus\" "
     "FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso "
     "JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro "
     "JOIN departamentos d ON pm.id_departamento=d.id_departamento "
-    "WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 60",
-    desc="Cronograma tipo Gantt de los cursos programados"), 24, 11))
+    "WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 200",
+    desc="Cronograma de cursos programados (línea de tiempo)"), 24, 11))
 p.append((piechart(1, "Estatus de Cursos Programados",
     "SELECT estatus AS metric, count(*) AS value FROM cursos_programados GROUP BY estatus", donut=True), 8, 9))
 p.append((stat(2, "Planes Maestros Registrados", "SELECT count(*) FROM plan_maestro", "short", 0,
@@ -415,10 +415,10 @@ p.append((barchart(1, "Cursos Programados por Semana (2026)",
 p.append((barchart(2, "Cursos por Anio Fiscal",
     "SELECT anio_fiscal::text AS \"Anio\", count(*) AS \"Cursos\" FROM cursos_programados "
     "GROUP BY anio_fiscal ORDER BY anio_fiscal", legend=False), 12, 8))
-p.append((barchart(3, "Horas de Capacitacion Programadas por Anio",
-    "SELECT cpr.anio_fiscal::text AS \"Anio\", sum(c.horas) AS \"Horas\" FROM cursos_programados cpr "
+p.append((barchart(3, "Horas de Capacitación Programadas por Año",
+    "SELECT cpr.anio_fiscal::text AS \"Año\", sum(c.horas) AS \"Horas\" FROM cursos_programados cpr "
     "JOIN cursos c ON cpr.id_curso=c.id_curso GROUP BY cpr.anio_fiscal ORDER BY cpr.anio_fiscal",
-    unit="h", legend=False), 12, 8))
+    unit="short", legend=False), 12, 8))
 p.append((table(4, "Calendario de Cursos Proximos (2026)",
     "SELECT c.nombre_curso AS \"Curso\", cpr.semana AS \"Semana\", cpr.fecha_inicio AS \"Inicio\", "
     "cpr.fecha_fin AS \"Fin\", c.horas AS \"Horas\", cpr.estatus AS \"Estatus\" "
@@ -515,8 +515,8 @@ open(f"{OUT}/10_iso.json", "w").write(json.dumps(dash, indent=2))
 # 11 - SEGUIMIENTO DE AUTORIZACIONES (Timeline)
 # =====================================================================
 p = []
-p.append((stat(1, "Tiempo Promedio de Autorizacion",
-    "SELECT round(avg(fecha_aprobacion - fecha_envio),1) FROM descripciones_puesto WHERE autorizada", "d", 1,
+p.append((stat(1, "Tiempo Promedio de Autorización (días)",
+    "SELECT round(avg(fecha_aprobacion - fecha_envio),1) FROM descripciones_puesto WHERE autorizada", "short", 1,
     thr([{"color": "green", "value": None}, {"color": "yellow", "value": 3}, {"color": "red", "value": 5}])), 8, 5))
 p.append((stat(2, "DDP Pendientes de Firma",
     "SELECT count(*) FROM descripciones_puesto WHERE NOT autorizada", "short", 0,
@@ -524,10 +524,10 @@ p.append((stat(2, "DDP Pendientes de Firma",
 p.append((stat(3, "% Autorizadas en <= 3 dias",
     "SELECT round(100.0*count(*) FILTER (WHERE (fecha_aprobacion-fecha_envio)<=3)/"
     "nullif(count(*) FILTER (WHERE autorizada),0),1) FROM descripciones_puesto", "percent", 1, PCT_THR), 8, 5))
-p.append((barchart(4, "Tiempo Promedio de Autorizacion por Departamento (dias)",
+p.append((barchart(4, "Tiempo Promedio de Autorización por Departamento (días)",
     "SELECT d.departamento, round(avg(dp.fecha_aprobacion - dp.fecha_envio),1) AS dias "
     "FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento "
-    "WHERE dp.autorizada GROUP BY d.departamento ORDER BY dias DESC", horizontal=True, unit="d"), 24, 11))
+    "WHERE dp.autorizada GROUP BY d.departamento ORDER BY dias DESC", horizontal=True, unit="short"), 24, 11))
 p.append((table(5, "Flujo de Firmas - Autorizaciones Recientes",
     "SELECT pu.puesto AS \"Puesto\", d.departamento AS \"Departamento\", dp.elaborado_por AS \"Elaboro\", "
     "dp.fecha_creacion AS \"Creada\", dp.fecha_envio AS \"Enviada a RH\", dp.fecha_aprobacion AS \"Autorizada\", "
@@ -553,7 +553,7 @@ p.append((stat(3, "Reduccion Promedio de Tiempo",
     "FROM metricas_productividad", "percent", 1,
     thr([{"color": "green", "value": None}]), color_mode="value"), 8, 6))
 p.append((stat(4, "Horas Ahorradas (por ciclo completo)",
-    "SELECT round(sum(tiempo_antes_min - tiempo_despues_min)/60.0,1) FROM metricas_productividad", "h", 1,
+    "SELECT round(sum(tiempo_antes_min - tiempo_despues_min)/60.0,1) FROM metricas_productividad", "short", 1,
     thr([{"color": "blue", "value": None}])), 8, 6))
 p.append((table(5, "Detalle de Productividad",
     "SELECT proceso AS \"Proceso\", tiempo_antes_min AS \"Antes (min)\", tiempo_despues_min AS \"Despues (min)\", "

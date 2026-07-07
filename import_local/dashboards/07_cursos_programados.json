@@ -208,7 +208,7 @@
     {
       "id": 3,
       "type": "barchart",
-      "title": "Horas de Capacitacion Programadas por Anio",
+      "title": "Horas de Capacitaci\u00f3n Programadas por A\u00f1o",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -222,14 +222,14 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "SELECT cpr.anio_fiscal::text AS \"Anio\", sum(c.horas) AS \"Horas\" FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso GROUP BY cpr.anio_fiscal ORDER BY cpr.anio_fiscal",
+          "rawSql": "SELECT cpr.anio_fiscal::text AS \"A\u00f1o\", sum(c.horas) AS \"Horas\" FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso GROUP BY cpr.anio_fiscal ORDER BY cpr.anio_fiscal",
           "editorMode": "code",
           "rawQuery": true
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "h",
+          "unit": "short",
           "color": {
             "mode": "palette-classic"
           },

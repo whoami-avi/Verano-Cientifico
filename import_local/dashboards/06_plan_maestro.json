@@ -36,9 +36,9 @@
   "panels": [
     {
       "id": 8,
-      "type": "marcusolsson-gantt-panel",
-      "title": "Gantt - Cursos del Plan Maestro (2026)",
-      "description": "Cronograma tipo Gantt de los cursos programados",
+      "type": "table",
+      "title": "Cronograma de Cursos del Plan Maestro (2026)",
+      "description": "Cronograma de cursos programados (l\u00ednea de tiempo)",
       "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
@@ -51,29 +51,33 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "SELECT c.nombre_curso AS curso, cpr.fecha_inicio::timestamp AS start_time, cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus, d.departamento AS departamento FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro JOIN departamentos d ON pm.id_departamento=d.id_departamento WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 60",
+          "rawSql": "SELECT d.departamento AS \"Departamento\", c.nombre_curso AS \"Curso\", cpr.semana AS \"Semana\", cpr.fecha_inicio AS \"Inicio\", cpr.fecha_fin AS \"Fin\", cpr.estatus AS \"Estatus\" FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro JOIN departamentos d ON pm.id_departamento=d.id_departamento WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 200",
           "editorMode": "code",
           "rawQuery": true
         }
       ],
-      "options": {
-        "colorField": "estatus",
-        "labelFields": [
-          "curso"
-        ],
-        "textField": "curso",
-        "startField": "start_time",
-        "endField": "end_time",
-        "groupByField": "departamento",
-        "showYAxis": true,
-        "sortBy": "startTime",
-        "sortOrder": "asc"
-      },
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true
+          },
+          "color": {
+            "mode": "thresholds"
+          }
         },
         "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": []
       },
       "gridPos": {
         "h": 11,

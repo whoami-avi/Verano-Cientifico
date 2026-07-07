@@ -37,7 +37,7 @@
     {
       "id": 1,
       "type": "stat",
-      "title": "Tiempo Promedio de Autorizacion",
+      "title": "Tiempo Promedio de Autorizaci\u00f3n (d\u00edas)",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -58,7 +58,7 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "d",
+          "unit": "short",
           "decimals": 1,
           "mappings": [],
           "thresholds": {
@@ -246,7 +246,7 @@
     {
       "id": 4,
       "type": "barchart",
-      "title": "Tiempo Promedio de Autorizacion por Departamento (dias)",
+      "title": "Tiempo Promedio de Autorizaci\u00f3n por Departamento (d\u00edas)",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -267,7 +267,7 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "d",
+          "unit": "short",
           "color": {
             "mode": "palette-classic"
           },
