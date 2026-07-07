@@ -5,11 +5,10 @@ datasources:
     uid: see_pg
     type: postgres
     access: proxy
-    # Docker Compose define SEE_PG_URL=db:5432 automaticamente.
-    # PARA USO MANUAL (tu Grafana nativa): reemplaza la linea de abajo por:
-    #   url: localhost:5432      (si tu Postgres corre nativo en tu Mac)
-    #   url: localhost:5433      (si levantaste SOLO la base con este docker-compose)
-    url: $SEE_PG_URL
+    # Con Docker Compose la URL correcta es "db:5432" (nombre del servicio de la base).
+    # PARA USO MANUAL (tu Grafana nativa) reemplaza por:
+    #   url: localhost:5432   (Postgres nativo en tu Mac)   o  url: localhost:5433
+    url: db:5432
     user: see_user
     database: see_db
     isDefault: true
