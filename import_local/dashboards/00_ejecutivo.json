@@ -36,7 +36,7 @@
         "name": "planta",
         "type": "query",
         "datasource": {
-          "type": "postgres",
+          "type": "grafana-postgresql-datasource",
           "uid": "see_pg"
         },
         "label": "Planta",
@@ -59,7 +59,7 @@
         "name": "departamento",
         "type": "query",
         "datasource": {
-          "type": "postgres",
+          "type": "grafana-postgresql-datasource",
           "uid": "see_pg"
         },
         "label": "Departamento",
@@ -103,7 +103,7 @@
       "title": "Empleados Activos",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM empleados e WHERE activo AND e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
@@ -166,7 +166,7 @@
       "title": "Competencias Evaluadas",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -174,7 +174,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
@@ -229,7 +229,7 @@
       "title": "% Cumplimiento Competencias",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -237,7 +237,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
@@ -304,7 +304,7 @@
       "title": "% Plan Maestro Cumplido",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -312,7 +312,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus<>'Cancelado'),0),1) FROM cursos_programados",
@@ -379,7 +379,7 @@
       "title": "% DDP Autorizadas",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -387,7 +387,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto",
@@ -454,7 +454,7 @@
       "title": "Cumplimiento Global de Competencias",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -462,7 +462,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
@@ -528,7 +528,7 @@
       "title": "Cumplimiento Plan Maestro",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -536,7 +536,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus<>'Cancelado'),0),1) FROM cursos_programados",
@@ -602,7 +602,7 @@
       "title": "Diagnostico: Competente vs No Competente",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -610,7 +610,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)",
@@ -672,7 +672,7 @@
       "title": "Cumplimiento por Departamento (%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -680,7 +680,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento) GROUP BY d.departamento ORDER BY cumplimiento DESC",
@@ -735,7 +735,7 @@
       "title": "Usuarios Activos del Sistema",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -743,7 +743,7 @@
           "refId": "A",
           "format": "time_series",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT fecha AS \"time\", usuarios_activos AS \"Usuarios activos\" FROM accesos_diarios WHERE $__timeFilter(fecha) ORDER BY fecha",

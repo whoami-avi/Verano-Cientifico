@@ -5,7 +5,7 @@ import json, os
 
 OUT = "/opt/grafana/conf/provisioning/dashboards/json"
 os.makedirs(OUT, exist_ok=True)
-DS = {"type": "postgres", "uid": "see_pg"}
+DS = {"type": "grafana-postgresql-datasource", "uid": "see_pg"}
 
 # ---------- helpers ----------
 def tgt(sql, fmt="table", ref="A"):

@@ -40,7 +40,7 @@
       "title": "Competente vs No Competente",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competente\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"No competente\" FROM ult",
@@ -110,7 +110,7 @@
       "title": "Brechas por Prioridad",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -118,7 +118,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT prioridad AS metric, count(*) AS value FROM ult WHERE NOT competente GROUP BY prioridad",
@@ -180,7 +180,7 @@
       "title": "Diagnosticos No Competentes (Prioridad Alta)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -188,7 +188,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE NOT competente AND prioridad='Alta'",
@@ -243,7 +243,7 @@
       "title": "Evaluaciones Registradas por Mes",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -251,7 +251,7 @@
           "refId": "A",
           "format": "time_series",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT date_trunc('month', fecha_registro)::date AS \"time\", count(*) AS \"Evaluaciones\", count(*) FILTER (WHERE NOT competente) AS \"No competentes\" FROM diagnosticos WHERE $__timeFilter(fecha_registro) GROUP BY 1 ORDER BY 1",
@@ -302,7 +302,7 @@
       "title": "Diagnosticos Recientes",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -310,7 +310,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT em.nombre AS \"Empleado\", d.departamento AS \"Departamento\", cp.descripcion_competencia AS \"Competencia\", CASE WHEN di.competente THEN 'Si' ELSE 'No' END AS \"Competente\", di.prioridad AS \"Prioridad\", di.fecha_registro AS \"Fecha\" FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj JOIN departamentos d ON em.id_departamento=d.id_departamento JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia ORDER BY di.fecha_registro DESC LIMIT 100",

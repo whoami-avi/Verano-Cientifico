@@ -40,7 +40,7 @@
       "title": "Cumplimiento por Planta (%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pl.planta, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN plantas pl ON e.clave_planta=pl.clave_planta GROUP BY pl.planta ORDER BY cumplimiento DESC",
@@ -103,7 +103,7 @@
       "title": "Distribucion de Empleados por Planta",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT pl.planta AS metric, count(*) AS value FROM empleados e JOIN plantas pl ON e.clave_planta=pl.clave_planta WHERE e.activo GROUP BY pl.planta",
@@ -173,7 +173,7 @@
       "title": "Resumen por Planta",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -181,7 +181,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pl.planta AS \"Planta\", pl.ubicacion AS \"Ubicacion\", count(DISTINCT e.no_reloj) AS \"Empleados\", count(*) AS \"Evaluaciones\", round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS \"% Cumplimiento\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN plantas pl ON e.clave_planta=pl.clave_planta GROUP BY pl.planta, pl.ubicacion ORDER BY \"% Cumplimiento\" DESC",

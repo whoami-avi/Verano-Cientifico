@@ -40,7 +40,7 @@
       "title": "Top 15 Puestos: Competencias Requeridas vs Logradas",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.puesto, count(*) AS \"Requeridas\", sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Logradas\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.puesto ORDER BY \"Requeridas\" DESC LIMIT 15",
@@ -103,7 +103,7 @@
       "title": "Cumplimiento por Clasificacion de Puesto (%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.clasificacion, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.clasificacion ORDER BY cumplimiento DESC",
@@ -166,7 +166,7 @@
       "title": "Competencias por Tipo",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -174,7 +174,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT tipo AS metric, count(*) AS value FROM competencias_puesto GROUP BY tipo",

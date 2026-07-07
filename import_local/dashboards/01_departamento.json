@@ -40,7 +40,7 @@
       "title": "Cumplimiento de Competencias por Departamento (%)",
       "description": "Meta >= 95%",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY cumplimiento DESC",
@@ -103,7 +103,7 @@
       "title": "Detalle por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS \"Departamento\", count(*) AS \"Evaluaciones\", sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS \"Competentes\", sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS \"Brechas\", round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS \"% Cumplimiento\" FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY \"% Cumplimiento\" DESC",

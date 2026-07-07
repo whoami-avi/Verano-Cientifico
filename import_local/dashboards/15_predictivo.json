@@ -57,7 +57,7 @@
       "title": "Competencias por Vencer (30 dias)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -65,7 +65,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE competente AND fecha_vencimiento BETWEEN now() AND now() + interval '30 days'",
@@ -120,7 +120,7 @@
       "title": "Empleados con Certificacion por Vencer",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -128,7 +128,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(DISTINCT no_reloj) FROM ult WHERE competente AND fecha_vencimiento BETWEEN now() AND now() + interval '60 days'",
@@ -183,7 +183,7 @@
       "title": "Cursos a Programar (proximo mes)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -191,7 +191,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM cursos_programados WHERE estatus='Programado' AND fecha_inicio BETWEEN now() AND now() + interval '30 days'",
@@ -246,7 +246,7 @@
       "title": "Departamentos en Riesgo (<80%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -254,7 +254,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM (SELECT e.id_departamento, 100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0) AS pct FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj GROUP BY e.id_departamento) t WHERE pct < 80",
@@ -309,7 +309,7 @@
       "title": "Departamentos con Mayor Riesgo de Incumplimiento (menor % cumplimiento)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -317,7 +317,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY cumplimiento ASC LIMIT 10",
@@ -372,7 +372,7 @@
       "title": "Tendencia Anual de Cumplimiento del Plan Maestro",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -380,7 +380,7 @@
           "refId": "A",
           "format": "time_series",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT make_date(anio_fiscal,1,1) AS \"time\", round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus<>'Cancelado'),0),1) AS \"% Cumplimiento Plan Maestro\" FROM cursos_programados GROUP BY anio_fiscal ORDER BY anio_fiscal",
@@ -431,7 +431,7 @@
       "title": "Certificaciones Proximas a Vencer (siguientes 60 dias)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -439,7 +439,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT em.nombre AS \"Empleado\", d.departamento AS \"Departamento\", cp.descripcion_competencia AS \"Competencia\", ult.fecha_vencimiento AS \"Vence\", (ult.fecha_vencimiento - CURRENT_DATE) AS \"Dias restantes\" FROM ult JOIN empleados em ON ult.no_reloj=em.no_reloj JOIN departamentos d ON em.id_departamento=d.id_departamento JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE ult.competente AND ult.fecha_vencimiento BETWEEN now() AND now() + interval '60 days' ORDER BY ult.fecha_vencimiento LIMIT 100",

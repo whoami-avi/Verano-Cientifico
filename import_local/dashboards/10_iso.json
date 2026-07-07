@@ -57,7 +57,7 @@
       "title": "Documentos Controlados (DDP Autorizadas)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -65,7 +65,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto",
@@ -131,7 +131,7 @@
       "title": "Descripciones de Puesto Registradas",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -139,7 +139,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM descripciones_puesto",
@@ -194,7 +194,7 @@
       "title": "Revision Promedio de Documentos",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -202,7 +202,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(avg(revision),1) FROM descripciones_puesto",
@@ -257,7 +257,7 @@
       "title": "DDP Autorizadas vs Pendientes por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -265,7 +265,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento, count(*) FILTER (WHERE dp.autorizada) AS \"Autorizadas\", count(*) FILTER (WHERE NOT dp.autorizada) AS \"Pendientes\" FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento",
@@ -320,7 +320,7 @@
       "title": "Estatus Documental de DDP",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -328,7 +328,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT CASE WHEN autorizada THEN 'Autorizada' ELSE 'Pendiente' END AS metric, count(*) AS value FROM descripciones_puesto GROUP BY 1",
@@ -390,7 +390,7 @@
       "title": "Documentos Creados por Mes",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -398,7 +398,7 @@
           "refId": "A",
           "format": "time_series",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT date_trunc('month', fecha_creacion)::date AS \"time\", count(*) AS \"DDP creadas\" FROM descripciones_puesto WHERE $__timeFilter(fecha_creacion) GROUP BY 1 ORDER BY 1",

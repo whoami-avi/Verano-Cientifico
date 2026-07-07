@@ -56,7 +56,7 @@
       "title": "Tiempo por Proceso: Antes vs Despues (minutos)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -64,7 +64,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT proceso AS \"Proceso\", tiempo_antes_min AS \"Antes (manual)\", tiempo_despues_min AS \"Despues (SEE)\" FROM metricas_productividad ORDER BY tiempo_antes_min DESC",
@@ -119,7 +119,7 @@
       "title": "Reduccion Promedio de Tiempo",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -127,7 +127,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(avg(100.0*(tiempo_antes_min - tiempo_despues_min)/nullif(tiempo_antes_min,0)),1) FROM metricas_productividad",
@@ -182,7 +182,7 @@
       "title": "Horas Ahorradas (por ciclo completo)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -190,7 +190,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(sum(tiempo_antes_min - tiempo_despues_min)/60.0,1) FROM metricas_productividad",
@@ -245,7 +245,7 @@
       "title": "Detalle de Productividad",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -253,7 +253,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT proceso AS \"Proceso\", tiempo_antes_min AS \"Antes (min)\", tiempo_despues_min AS \"Despues (min)\", round(100.0*(tiempo_antes_min - tiempo_despues_min)/nullif(tiempo_antes_min,0),1) AS \"% Reduccion\" FROM metricas_productividad ORDER BY \"% Reduccion\" DESC",

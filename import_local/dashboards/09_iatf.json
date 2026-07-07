@@ -57,7 +57,7 @@
       "title": "Cumplimiento Competencias Criticas (Normativas)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -65,7 +65,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE cp.tipo='Normativa'",
@@ -131,7 +131,7 @@
       "title": "DDP Autorizadas (Meta 100%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -139,7 +139,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto",
@@ -201,7 +201,7 @@
       "title": "Planes Maestros Firmados por Gerente de Planta",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -209,7 +209,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*sum(CASE WHEN firma_gerente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM plan_maestro",
@@ -275,7 +275,7 @@
       "title": "Cumplimiento por Competencia Normativa (%)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -283,7 +283,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT cp.descripcion_competencia AS metric, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS value FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE cp.tipo='Normativa' GROUP BY cp.descripcion_competencia ORDER BY value DESC",
@@ -350,7 +350,7 @@
       "title": "Estatus Normativo por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -358,7 +358,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS \"Departamento\", round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS \"% Competencias Normativas\", count(*) FILTER (WHERE NOT ult.competente) AS \"Brechas Normativas\" FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE cp.tipo='Normativa' GROUP BY d.departamento ORDER BY \"% Competencias Normativas\"",

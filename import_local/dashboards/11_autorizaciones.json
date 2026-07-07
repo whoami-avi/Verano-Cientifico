@@ -40,7 +40,7 @@
       "title": "Tiempo Promedio de Autorizacion",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(avg(fecha_aprobacion - fecha_envio),1) FROM descripciones_puesto WHERE autorizada",
@@ -111,7 +111,7 @@
       "title": "DDP Pendientes de Firma",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -119,7 +119,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM descripciones_puesto WHERE NOT autorizada",
@@ -174,7 +174,7 @@
       "title": "% Autorizadas en <= 3 dias",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -182,7 +182,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*count(*) FILTER (WHERE (fecha_aprobacion-fecha_envio)<=3)/nullif(count(*) FILTER (WHERE autorizada),0),1) FROM descripciones_puesto",
@@ -249,7 +249,7 @@
       "title": "Tiempo Promedio de Autorizacion por Departamento (dias)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -257,7 +257,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento, round(avg(dp.fecha_aprobacion - dp.fecha_envio),1) AS dias FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento WHERE dp.autorizada GROUP BY d.departamento ORDER BY dias DESC",
@@ -312,7 +312,7 @@
       "title": "Flujo de Firmas - Autorizaciones Recientes",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -320,7 +320,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT pu.puesto AS \"Puesto\", d.departamento AS \"Departamento\", dp.elaborado_por AS \"Elaboro\", dp.fecha_creacion AS \"Creada\", dp.fecha_envio AS \"Enviada a RH\", dp.fecha_aprobacion AS \"Autorizada\", (dp.fecha_aprobacion - dp.fecha_envio) AS \"Dias\", CASE WHEN dp.autorizada THEN 'Autorizada' ELSE 'Pendiente' END AS \"Estatus\" FROM descripciones_puesto dp JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto JOIN departamentos d ON dp.id_departamento=d.id_departamento ORDER BY dp.fecha_envio DESC LIMIT 100",

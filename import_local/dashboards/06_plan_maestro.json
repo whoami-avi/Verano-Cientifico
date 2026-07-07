@@ -40,7 +40,7 @@
       "title": "Estatus de Cursos Programados",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT estatus AS metric, count(*) AS value FROM cursos_programados GROUP BY estatus",
@@ -110,7 +110,7 @@
       "title": "Planes Maestros Registrados",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -118,7 +118,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM plan_maestro",
@@ -173,7 +173,7 @@
       "title": "% Planes Totalmente Firmados",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -181,7 +181,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*count(*) FILTER (WHERE firma_mnj_depto AND firma_mnj_entto AND firma_gerente)/nullif(count(*),0),1) FROM plan_maestro",
@@ -248,7 +248,7 @@
       "title": "Cursos Completados",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -256,7 +256,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM cursos_programados WHERE estatus='Completado'",
@@ -311,7 +311,7 @@
       "title": "Cursos En Curso / Programados",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -319,7 +319,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM cursos_programados WHERE estatus IN ('En curso','Programado')",
@@ -374,7 +374,7 @@
       "title": "Estatus de Cursos por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -382,7 +382,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento, count(*) FILTER (WHERE cpr.estatus='Completado') AS \"Completado\", count(*) FILTER (WHERE cpr.estatus='En curso') AS \"En curso\", count(*) FILTER (WHERE cpr.estatus='Programado') AS \"Programado\", count(*) FILTER (WHERE cpr.estatus='Cancelado') AS \"Cancelado\" FROM cursos_programados cpr JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro JOIN departamentos d ON pm.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento",
@@ -437,7 +437,7 @@
       "title": "Plan Maestro por Departamento y Anio Fiscal",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -445,7 +445,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento AS \"Departamento\", pm.anio_fiscal AS \"Anio Fiscal\", pm.revision AS \"Revision\", CASE WHEN pm.firma_mnj_depto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Depto\", CASE WHEN pm.firma_mnj_entto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Entto\", CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS \"Firma Gerente\" FROM plan_maestro pm JOIN departamentos d ON pm.id_departamento=d.id_departamento ORDER BY pm.anio_fiscal DESC, d.departamento",

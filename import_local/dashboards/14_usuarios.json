@@ -40,7 +40,7 @@
       "title": "Promedio Usuarios Activos / dia",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(avg(usuarios_activos),0) FROM accesos_diarios WHERE fecha >= now() - interval '90 days'",
@@ -103,7 +103,7 @@
       "title": "Pico Maximo de Usuarios",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT max(usuarios_activos) FROM accesos_diarios",
@@ -166,7 +166,7 @@
       "title": "Sesiones Totales (3 anios)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -174,7 +174,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT sum(sesiones) FROM accesos_diarios",
@@ -229,7 +229,7 @@
       "title": "Usuarios Activos y Sesiones (Serie de Tiempo)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -237,7 +237,7 @@
           "refId": "A",
           "format": "time_series",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT fecha AS \"time\", usuarios_activos AS \"Usuarios activos\", sesiones AS \"Sesiones\" FROM accesos_diarios WHERE $__timeFilter(fecha) ORDER BY fecha",
@@ -288,7 +288,7 @@
       "title": "Promedio de Usuarios Activos por Mes",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -296,7 +296,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT to_char(date_trunc('month', fecha),'YYYY-MM') AS \"Mes\", round(avg(usuarios_activos),0) AS \"Promedio\" FROM accesos_diarios WHERE fecha >= now() - interval '12 months' GROUP BY 1 ORDER BY 1",

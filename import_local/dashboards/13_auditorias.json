@@ -40,7 +40,7 @@
       "title": "DDP Listas para Auditoria",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM descripciones_puesto WHERE autorizada",
@@ -103,7 +103,7 @@
       "title": "DDP No Listas (sin firma)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM descripciones_puesto WHERE NOT autorizada",
@@ -166,7 +166,7 @@
       "title": "% Documentacion Lista para Auditoria",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -174,7 +174,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto",
@@ -240,7 +240,7 @@
       "title": "Documentos Listos para Auditoria por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -248,7 +248,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento, count(*) FILTER (WHERE dp.autorizada) AS \"Listos\", count(*) FILTER (WHERE NOT dp.autorizada) AS \"No listos\" FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento",
@@ -303,7 +303,7 @@
       "title": "Checklist de Auditoria (DDP)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -311,7 +311,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT pu.puesto AS \"Puesto\", d.departamento AS \"Departamento\", pl.planta AS \"Planta\", dp.revision AS \"Revision\", CASE WHEN dp.autorizada THEN 'LISTO' ELSE 'PENDIENTE' END AS \"Estatus Auditoria\", dp.fecha_aprobacion AS \"Fecha Autorizacion\" FROM descripciones_puesto dp JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto JOIN departamentos d ON dp.id_departamento=d.id_departamento JOIN plantas pl ON dp.clave_planta=pl.clave_planta ORDER BY dp.autorizada, d.departamento LIMIT 150",

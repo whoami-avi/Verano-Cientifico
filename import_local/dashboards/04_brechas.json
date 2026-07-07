@@ -40,7 +40,7 @@
       "title": "Mapa de Calor de Brechas (No competentes por Departamento y Tipo)",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS \"Departamento\", count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Normativa') AS \"Normativa\", count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Tecnica') AS \"Tecnica\", count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Operativa') AS \"Operativa\", count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Blanda') AS \"Blanda\", count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Administrativa') AS \"Administrativa\", count(*) FILTER (WHERE NOT ult.competente) AS \"Total brechas\" FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY \"Total brechas\" DESC",
@@ -219,7 +219,7 @@
       "title": "Top 15 Competencias con Mayor Brecha",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -227,7 +227,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT cp.descripcion_competencia, count(*) AS brechas FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE NOT ult.competente GROUP BY cp.descripcion_competencia ORDER BY brechas DESC LIMIT 15",

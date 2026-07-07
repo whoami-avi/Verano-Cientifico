@@ -40,7 +40,7 @@
       "title": "Evidencias Cargadas",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -48,7 +48,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT count(*) FROM diagnosticos WHERE ruta_evidencia IS NOT NULL",
@@ -103,7 +103,7 @@
       "title": "% Competencias con Evidencia",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -111,7 +111,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*count(*) FILTER (WHERE ruta_evidencia IS NOT NULL)/nullif(count(*) FILTER (WHERE competente),0),1) FROM ult",
@@ -178,7 +178,7 @@
       "title": "Competentes sin Evidencia",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -186,7 +186,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE competente AND ruta_evidencia IS NULL",
@@ -241,7 +241,7 @@
       "title": "Evidencias por Departamento",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -249,7 +249,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT d.departamento, count(*) AS \"Evidencias\" FROM diagnosticos di JOIN empleados e ON di.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE di.ruta_evidencia IS NOT NULL GROUP BY d.departamento ORDER BY \"Evidencias\" DESC",
@@ -304,7 +304,7 @@
       "title": "Registro de Evidencias Digitales",
       "description": "",
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "see_pg"
       },
       "targets": [
@@ -312,7 +312,7 @@
           "refId": "A",
           "format": "table",
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
           "rawSql": "SELECT em.nombre AS \"Empleado\", cp.descripcion_competencia AS \"Competencia\", di.ruta_evidencia AS \"Ruta Evidencia\", di.fecha_registro AS \"Fecha Registro\", di.fecha_vencimiento AS \"Vence\" FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia WHERE di.ruta_evidencia IS NOT NULL ORDER BY di.fecha_registro DESC LIMIT 150",
