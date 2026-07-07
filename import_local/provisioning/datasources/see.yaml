@@ -16,6 +16,7 @@ datasources:
     secureJsonData:
       password: see_pass_2026
     jsonData:
+      database: see_db
       sslmode: disable
       postgresVersion: 1500
       timescaledb: false

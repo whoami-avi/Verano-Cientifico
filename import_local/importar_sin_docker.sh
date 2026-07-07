@@ -89,7 +89,7 @@ curl -s $AUTH -X POST "$API/datasources" -H "Content-Type: application/json" -d 
   "name":"SEE PostgreSQL","uid":"see_pg","type":"postgres","access":"proxy",
   "url":"'"$PG_URL_FOR_GRAFANA"'","user":"see_user","database":"see_db","isDefault":true,
   "secureJsonData":{"password":"see_pass_2026"},
-  "jsonData":{"sslmode":"disable","postgresVersion":1500}
+  "jsonData":{"database":"see_db","sslmode":"disable","postgresVersion":1500}
 }' >/dev/null
 echo "   ✅ Fuente de datos lista (uid: see_pg)"
 
