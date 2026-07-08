@@ -22,7 +22,7 @@
       "asDropdown": true,
       "icon": "external link",
       "includeVars": true,
-      "keepTime": true,
+      "keepTime": false,
       "targetBlank": false
     }
   ],

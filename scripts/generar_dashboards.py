@@ -175,7 +175,7 @@ def dashboard(uid, title, tags, panels, with_vars=False, time_from="now-3y",
     if link_others:
         links = [{"title": "Reportes SEE", "type": "dashboards", "tags": ["see"],
                   "asDropdown": True, "icon": "external link", "includeVars": True,
-                  "keepTime": True, "targetBlank": False}]
+                  "keepTime": False, "targetBlank": False}]
     return {
         "uid": uid, "title": title, "tags": tags, "timezone": "browser",
         "schemaVersion": 39, "version": 1, "refresh": refresh, "editable": True,
