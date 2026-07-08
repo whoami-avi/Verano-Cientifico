@@ -486,7 +486,7 @@
     {
       "id": 7,
       "type": "table",
-      "title": "Plan Maestro por Departamento y Anio Fiscal",
+      "title": "Plan Maestro por Departamento y A\u00f1o Fiscal",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
@@ -500,7 +500,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "SELECT d.departamento AS \"Departamento\", pm.anio_fiscal AS \"Anio Fiscal\", pm.revision AS \"Revision\", CASE WHEN pm.firma_mnj_depto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Depto\", CASE WHEN pm.firma_mnj_entto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Entto\", CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS \"Firma Gerente\" FROM plan_maestro pm JOIN departamentos d ON pm.id_departamento=d.id_departamento ORDER BY pm.anio_fiscal DESC, d.departamento",
+          "rawSql": "SELECT d.departamento AS \"Departamento\", pm.anio_fiscal AS \"A\u00f1o Fiscal\", pm.revision AS \"Revisi\u00f3n\", CASE WHEN pm.firma_mnj_depto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Depto\", CASE WHEN pm.firma_mnj_entto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Entto\", CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS \"Firma Gerente\" FROM plan_maestro pm JOIN departamentos d ON pm.id_departamento=d.id_departamento ORDER BY pm.anio_fiscal DESC, d.departamento",
           "editorMode": "code",
           "rawQuery": true
         }

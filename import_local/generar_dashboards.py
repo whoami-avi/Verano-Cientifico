@@ -389,8 +389,8 @@ p.append((barchart(6, "Estatus de Cursos por Departamento",
     "FROM cursos_programados cpr JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro "
     "JOIN departamentos d ON pm.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento",
     horizontal=True, stacked=True), 24, 12))
-p.append((table(7, "Plan Maestro por Departamento y Anio Fiscal",
-    "SELECT d.departamento AS \"Departamento\", pm.anio_fiscal AS \"Anio Fiscal\", pm.revision AS \"Revision\", "
+p.append((table(7, "Plan Maestro por Departamento y Año Fiscal",
+    "SELECT d.departamento AS \"Departamento\", pm.anio_fiscal AS \"Año Fiscal\", pm.revision AS \"Revisión\", "
     "CASE WHEN pm.firma_mnj_depto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Depto\", "
     "CASE WHEN pm.firma_mnj_entto THEN 'Si' ELSE 'No' END AS \"Firma MNJ Entto\", "
     "CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS \"Firma Gerente\" "
@@ -410,9 +410,9 @@ p.append((calendar_panel(8, "Calendario Anual de Cursos (2026)",
     "WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio",
     desc="Vista de calendario de los cursos programados"), 24, 12))
 p.append((barchart(1, "Cursos Programados por Semana (2026)",
-    "SELECT semana AS \"Semana\", count(*) AS \"Cursos\" FROM cursos_programados WHERE anio_fiscal=2026 "
+    "SELECT semana::text AS \"Semana\", count(*) AS \"Cursos\" FROM cursos_programados WHERE anio_fiscal=2026 "
     "GROUP BY semana ORDER BY semana", legend=False), 24, 9))
-p.append((barchart(2, "Cursos por Anio Fiscal",
+p.append((barchart(2, "Cursos por Año Fiscal",
     "SELECT anio_fiscal::text AS \"Anio\", count(*) AS \"Cursos\" FROM cursos_programados "
     "GROUP BY anio_fiscal ORDER BY anio_fiscal", legend=False), 12, 8))
 p.append((barchart(3, "Horas de Capacitación Programadas por Año",

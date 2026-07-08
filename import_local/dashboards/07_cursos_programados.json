@@ -96,7 +96,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "see_pg"
           },
-          "rawSql": "SELECT semana AS \"Semana\", count(*) AS \"Cursos\" FROM cursos_programados WHERE anio_fiscal=2026 GROUP BY semana ORDER BY semana",
+          "rawSql": "SELECT semana::text AS \"Semana\", count(*) AS \"Cursos\" FROM cursos_programados WHERE anio_fiscal=2026 GROUP BY semana ORDER BY semana",
           "editorMode": "code",
           "rawQuery": true
         }
@@ -145,7 +145,7 @@
     {
       "id": 2,
       "type": "barchart",
-      "title": "Cursos por Anio Fiscal",
+      "title": "Cursos por A\u00f1o Fiscal",
       "description": "",
       "datasource": {
         "type": "grafana-postgresql-datasource",
