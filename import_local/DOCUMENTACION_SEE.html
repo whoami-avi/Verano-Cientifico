@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Documentacion SEE - Sistema de Entrenamiento Electronico</title>
+<style>
+  :root { --azul:#0b3d6b; --azul2:#1565a7; --gris:#f4f6f9; --texto:#1f2733; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         color: var(--texto); line-height: 1.6; max-width: 900px; margin: 0 auto;
+         padding: 48px 40px; font-size: 15px; }
+  h1 { color: var(--azul); font-size: 30px; border-bottom: 4px solid var(--azul);
+       padding-bottom: 10px; margin-top: 8px; }
+  h2 { color: var(--azul); font-size: 23px; border-bottom: 2px solid #d5dee8;
+       padding-bottom: 6px; margin-top: 40px; page-break-after: avoid; }
+  h3 { color: var(--azul2); font-size: 18px; margin-top: 28px; page-break-after: avoid; }
+  p, li { text-align: justify; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 13.5px;
+          page-break-inside: avoid; }
+  th { background: var(--azul); color: #fff; text-align: left; padding: 8px 10px; }
+  td { border: 1px solid #d5dee8; padding: 7px 10px; vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gris); }
+  code { background: #eef2f7; padding: 1px 5px; border-radius: 4px;
+         font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; }
+  pre { background: #0f2740; color: #e6edf3; padding: 14px 16px; border-radius: 8px;
+        overflow-x: auto; page-break-inside: avoid; border-left: 4px solid var(--azul2); }
+  pre code { background: none; color: #e6edf3; padding: 0; font-size: 12.5px; }
+  blockquote { border-left: 4px solid var(--azul2); background: var(--gris);
+               margin: 16px 0; padding: 8px 16px; color: #33475b; }
+  hr { border: none; border-top: 1px solid #d5dee8; margin: 28px 0; }
+  strong { color: #12324f; }
+  @media print {
+    body { padding: 0; font-size: 12px; max-width: none; }
+    h1 { font-size: 24px; } h2 { font-size: 18px; } h3 { font-size: 15px; }
+    pre, table { font-size: 11px; }
+    h2 { page-break-before: auto; }
+  }
+</style>
+</head>
+<body>
+<h1 id="sistema-de-entrenamiento-electronico-see">Sistema de Entrenamiento Electronico (SEE)</h1>
+<h2 id="plataforma-de-business-intelligence-en-grafana-para-la-gestion-de-la-capacitacion-industrial">Plataforma de Business Intelligence en Grafana para la gestion de la capacitacion industrial</h2>
+<p><strong>Modulos:</strong> Descripciones de Puesto (DDP) · Diagnostico de Necesidades (DDN) · Plan Maestro de Entrenamiento
+<strong>Cumplimiento normativo:</strong> IATF 16949:2016 · ISO 9001:2015
+<strong>Herramienta:</strong> Grafana 13 (OSS) + PostgreSQL 15
+<strong>Proyecto:</strong> Verano Cientifico</p>
+<hr />
+<h2 id="indice">Indice</h2>
+<ol>
+<li>Resumen ejecutivo</li>
+<li>Introduccion y contexto</li>
+<li>Objetivos y alcance</li>
+<li>El Sistema de Entrenamiento Electronico (SEE)</li>
+<li>Arquitectura tecnica de la solucion</li>
+<li>Modelo de datos</li>
+<li>Metodologia y datos de simulacion</li>
+<li>Catalogo de dashboards (16 reportes)</li>
+<li>Diccionario de indicadores (KPIs)</li>
+<li>Alineacion con IATF 16949:2016 e ISO 9001:2015</li>
+<li>Modulo de reportes predictivos</li>
+<li>Casos de uso</li>
+<li>Resultados esperados y beneficios</li>
+<li>Conclusiones y trabajo futuro</li>
+<li>Anexo A: Consultas SQL documentadas</li>
+<li>Anexo B: Guia de despliegue y acceso</li>
+</ol>
+<hr />
+<h2 id="1-resumen-ejecutivo">1. Resumen ejecutivo</h2>
+<p>El presente documento describe el diseno, la implementacion y la interpretacion de una
+plataforma de <strong>inteligencia de negocio (Business Intelligence)</strong> construida sobre
+<strong>Grafana</strong> y <strong>PostgreSQL</strong> para el <strong>Sistema de Entrenamiento Electronico (SEE)</strong> de
+una organizacion manufacturera del sector automotriz.</p>
+<p>El SEE digitaliza tres procesos criticos de la gestion del talento y la calidad:</p>
+<ul>
+<li><strong>Descripciones de Puesto (DDP):</strong> definicion formal de cada puesto, sus competencias
+  requeridas y su ciclo de elaboracion, envio y autorizacion.</li>
+<li><strong>Diagnostico de Necesidades (DDN):</strong> evaluacion de cada colaborador contra las
+  competencias de su puesto para identificar quien es <em>competente</em> y quien presenta
+  <em>brechas</em> de capacitacion.</li>
+<li><strong>Plan Maestro de Entrenamiento:</strong> programacion anual de cursos que cierra las brechas
+  detectadas, con su calendario, estatus y flujo de firmas.</li>
+</ul>
+<p>La solucion entrega <strong>16 tableros (dashboards)</strong> con mas de <strong>35 indicadores (KPIs)</strong>,
+alimentados por una base de datos con <strong>600 empleados, 18 departamentos, 3 plantas,
+150 puestos y 3 anios de historia</strong>. Los indicadores estan alineados a los requisitos
+de competencia y toma de conciencia de <strong>IATF 16949:2016 (clausula 7.2/7.3)</strong> y al
+control de informacion documentada de <strong>ISO 9001:2015 (clausula 7.5)</strong>.</p>
+<p>Los resultados de referencia del sistema muestran un <strong>93% de cumplimiento de
+competencias</strong> (558 de 600 colaboradores competentes), una reduccion promedio de tiempos
+administrativos superior al <strong>85%</strong> frente al proceso manual, y una trazabilidad completa
+de evidencias y autorizaciones lista para auditoria.</p>
+<h2 id="2-introduccion-y-contexto">2. Introduccion y contexto</h2>
+<p>En la industria automotriz, la norma <strong>IATF 16949</strong> exige demostrar que el personal que
+afecta la calidad del producto es <strong>competente</strong> con base en educacion, formacion,
+habilidades y experiencia, y que la organizacion <strong>conserva informacion documentada</strong> como
+evidencia de dicha competencia. Gestionar esto de forma manual (hojas de calculo, formatos
+en papel, firmas fisicas) es lento, propenso a errores y dificil de auditar.</p>
+<p>El <strong>Sistema de Entrenamiento Electronico (SEE)</strong> nace para digitalizar este proceso. Sin
+embargo, contar con los datos no basta: la direccion, los gerentes de departamento y los
+auditores necesitan <strong>visualizar</strong> el estado de la capacitacion en tiempo real para tomar
+decisiones. Ahi entra esta plataforma de dashboards, que convierte los datos operativos del
+SEE en <strong>informacion accionable</strong>.</p>
+<h2 id="3-objetivos-y-alcance">3. Objetivos y alcance</h2>
+<p><strong>Objetivo general.</strong> Disenar e implementar una plataforma de dashboards en Grafana que
+permita monitorear, analizar y auditar el desempeno del Sistema de Entrenamiento
+Electronico, alineada a IATF 16949 e ISO 9001.</p>
+<p><strong>Objetivos especificos.</strong></p>
+<ul>
+<li>Modelar en PostgreSQL los datos de DDP, DDN y Plan Maestro.</li>
+<li>Construir un conjunto de al menos 15 reportes con mas de 35 indicadores.</li>
+<li>Definir un diccionario de KPIs con formula, meta y frecuencia.</li>
+<li>Documentar las consultas SQL que alimentan cada visualizacion.</li>
+<li>Incorporar un modulo de reportes predictivos para anticipar riesgos.</li>
+<li>Alinear los indicadores a los requisitos normativos aplicables.</li>
+</ul>
+<p><strong>Alcance.</strong> El proyecto cubre la capa analitica (visualizacion e indicadores) sobre datos
+simulados representativos. No incluye la captura transaccional del SEE (formularios de
+alta/edicion), que corresponde al sistema operativo fuente.</p>
+<h2 id="4-el-sistema-de-entrenamiento-electronico-see">4. El Sistema de Entrenamiento Electronico (SEE)</h2>
+<p>El SEE se compone de tres modulos encadenados:</p>
+<h3 id="41-descripciones-de-puesto-ddp">4.1 Descripciones de Puesto (DDP)</h3>
+<p>Cada puesto de la organizacion cuenta con una descripcion formal que define su objetivo y,
+sobre todo, el <strong>conjunto de competencias requeridas</strong>. La DDP sigue un flujo documental:
+es <em>elaborada</em> por el manejador (MNJ) del departamento, <em>enviada</em> a Recursos Humanos y
+finalmente <em>autorizada</em> (firmada). Una DDP autorizada es la base para poder evaluar al
+personal y es un documento controlado bajo ISO 9001.</p>
+<h3 id="42-diagnostico-de-necesidades-ddn">4.2 Diagnostico de Necesidades (DDN)</h3>
+<p>Para cada colaborador se evalua, competencia por competencia de su puesto, si es
+<strong>competente</strong> o presenta una <strong>brecha</strong>. Cuando existe evidencia (constancia, certificado,
+practica validada) se registra la <em>evidencia digital</em> asociada. El DDN clasifica las brechas
+por <strong>prioridad</strong> (Alta, Media, Baja) para orientar el plan de capacitacion.</p>
+<h3 id="43-plan-maestro-de-entrenamiento">4.3 Plan Maestro de Entrenamiento</h3>
+<p>Con las brechas identificadas se construye, por departamento y anio fiscal, el <strong>Plan
+Maestro</strong>: el catalogo de cursos, su <strong>programacion</strong> semanal, el estatus de cada curso
+(Programado, En curso, Completado, Cancelado) y el flujo de firmas (MNJ del departamento,
+MNJ de entrenamiento y Gerente de Planta). El Plan Maestro cierra el ciclo: detecta la
+brecha (DDN), la atiende con un curso y vuelve a evaluar.</p>
+<h2 id="5-arquitectura-tecnica-de-la-solucion">5. Arquitectura tecnica de la solucion</h2>
+<pre><code>Navegador  --HTTPS--&gt;  Grafana 13 (OSS)  --&gt;  PostgreSQL 15 (base see_db)
+                        |  16 dashboards provisionados
+                        |  1 fuente de datos (uid: see_pg)
+                        |  Idioma es-ES, tema oscuro, acceso anonimo de lectura
+</code></pre>
+<ul>
+<li><strong>Grafana 13 (OSS):</strong> motor de visualizacion. Los dashboards y la fuente de datos se
+  cargan por <em>aprovisionamiento</em> (archivos versionables), lo que hace el despliegue
+  reproducible y controlado por Git.</li>
+<li><strong>PostgreSQL 15:</strong> almacen analitico. Cada panel ejecuta una consulta SQL directa.</li>
+<li><strong>Docker Compose:</strong> orquesta ambos servicios en un solo comando; incluye el plugin
+  <em>Business Calendar</em> para la vista de calendario.</li>
+<li><strong>Plugin de calendario:</strong> <code>marcusolsson-calendar-panel</code> para el reporte de cursos
+  programados.</li>
+</ul>
+<p>Decisiones de diseno relevantes:</p>
+<ul>
+<li>Grafana se sirve bajo el subpath <code>/grafana</code> en el entorno de nube para no colisionar con
+  la ruta reservada <code>/api</code>; en local (Docker) se sirve en la raiz del puerto 3001.</li>
+<li>Se fija <code>jsonData.database = see_db</code> en la fuente de datos (requisito de Grafana 10+),
+  ademas del idioma <code>es-ES</code> para toda la interfaz.</li>
+</ul>
+<h2 id="6-modelo-de-datos">6. Modelo de datos</h2>
+<p>La base <code>see_db</code> implementa un modelo relacional normalizado. Tablas principales:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tabla</th>
+<th style="text-align: left;">Descripcion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>plantas</code></td>
+<td style="text-align: left;">Catalogo de plantas (3) y su ubicacion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>departamentos</code></td>
+<td style="text-align: left;">Catalogo de departamentos (18).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>areas</code></td>
+<td style="text-align: left;">Areas por departamento (55).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>puestos</code></td>
+<td style="text-align: left;">Catalogo de puestos (150) con su clasificacion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>empleados</code></td>
+<td style="text-align: left;">Colaboradores (600), su puesto, planta, area y estatus activo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>descripciones_puesto</code></td>
+<td style="text-align: left;">DDP (150): revision, fechas de creacion/envio/aprobacion, autorizada.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>competencias_puesto</code></td>
+<td style="text-align: left;">Competencias requeridas por DDP (~900), con su tipo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>diagnosticos</code></td>
+<td style="text-align: left;">Evaluaciones del DDN: competente, prioridad, evidencia, vencimiento.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cursos</code></td>
+<td style="text-align: left;">Cursos y sus horas.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>plan_maestro</code></td>
+<td style="text-align: left;">Plan Maestro por departamento y anio fiscal (54) con firmas.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cursos_programados</code></td>
+<td style="text-align: left;">Programacion semanal de cursos y su estatus.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cursos_participantes</code></td>
+<td style="text-align: left;">Asistencia de colaboradores a cursos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>accesos_diarios</code></td>
+<td style="text-align: left;">Serie de tiempo de uso del sistema (3 anios).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>metricas_productividad</code></td>
+<td style="text-align: left;">Comparativo de tiempos antes/despues del SEE.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rep_competencias</code>, <code>rep_brechas</code>, <code>rep_ddn</code></td>
+<td style="text-align: left;">Cifras oficiales de referencia del reporte.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regla de evaluacion vigente.</strong> Como un colaborador puede reevaluarse varias veces, los
+indicadores usan la <strong>ultima evaluacion</strong> por combinacion colaborador-competencia mediante
+<code>DISTINCT ON (no_reloj, id_competencia) ... ORDER BY fecha_registro DESC</code>.</p>
+<h2 id="7-metodologia-y-datos-de-simulacion">7. Metodologia y datos de simulacion</h2>
+<p>Ante la ausencia de acceso a la base productiva, se genero un <strong>conjunto de datos ficticio
+pero realista</strong> con distribuciones coherentes (antiguedad, rotacion ~6%, prioridades de
+brecha, estacionalidad de uso). Las cifras de referencia de los reportes clave se ajustaron
+a los <strong>valores oficiales del documento simulador G2</strong>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Indicador de referencia</th>
+<th style="text-align: left;">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Colaboradores competentes</td>
+<td style="text-align: left;">558</td>
+</tr>
+<tr>
+<td style="text-align: left;">Colaboradores con brecha</td>
+<td style="text-align: left;">42</td>
+</tr>
+<tr>
+<td style="text-align: left;">% de cumplimiento de competencias</td>
+<td style="text-align: left;">93%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Competencias por area normativa</td>
+<td style="text-align: left;">Seguridad 596/600, Calidad 589/600, Manufactura 545/580, Lean 381/420, IATF 360/400, ISO 372/400</td>
+</tr>
+<tr>
+<td style="text-align: left;">Brechas por departamento</td>
+<td style="text-align: left;">Produccion 25, Ingenieria 12, Calidad 8, Logistica 6, RH 3</td>
+</tr>
+</tbody>
+</table>
+<p>Los datos se regeneran de forma reproducible con <code>generar_datos.py</code>.</p>
+<h2 id="8-catalogo-de-dashboards-16-reportes">8. Catalogo de dashboards (16 reportes)</h2>
+<p>La solucion entrega 16 tableros organizados en la carpeta <em>SEE - Sistema de Entrenamiento</em>. Para cada uno se indica su objetivo, sus paneles y como interpretarlo.</p>
+<h3 id="01-dashboard-ejecutivo">01. Dashboard Ejecutivo</h3>
+<p><strong>Objetivo.</strong> Ofrecer a la direccion una vista integral del estado del SEE en una sola pantalla. <strong>Como leerlo.</strong> Las tarjetas superiores resumen los cuatro indicadores clave (empleados activos, cumplimiento de competencias, avance del Plan Maestro y DDP autorizadas); los medidores muestran el semaforo global; la dona compara competentes contra brechas; las barras ordenan a los departamentos de mayor a menor cumplimiento; y la serie de tiempo evidencia la adopcion del sistema. Los filtros de Planta y Departamento permiten acotar todo el tablero. <strong>Decision tipica.</strong> Detectar de inmediato si algun indicador global esta en rojo y en que area concentrarse.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Empleados Activos</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Competencias Evaluadas</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Cumplimiento Competencias</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Plan Maestro Cumplido</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% DDP Autorizadas</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cumplimiento Global de Competencias</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cumplimiento Plan Maestro</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Diagnóstico: Competente vs No Competente</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cumplimiento por Departamento (%)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Usuarios Activos del Sistema</td>
+<td style="text-align: left;">Serie de tiempo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="02-cumplimiento-por-departamento">02. Cumplimiento por Departamento</h3>
+<p><strong>Objetivo.</strong> Comparar el desempeno de los 18 departamentos. <strong>Como leerlo.</strong> La barra horizontal ordena de mayor a menor cumplimiento; la tabla detalla evaluaciones, competentes, brechas y porcentaje. La columna de brechas se colorea para resaltar los focos de atencion. <strong>Decision tipica.</strong> Priorizar apoyo a los departamentos por debajo de la meta (&gt;= 95%).</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cumplimiento de Competencias por Departamento (%)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Detalle por Departamento</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="03-cumplimiento-por-planta">03. Cumplimiento por Planta</h3>
+<p><strong>Objetivo.</strong> Evaluar el desempeno entre las tres plantas. <strong>Como leerlo.</strong> Las barras y la tabla muestran el porcentaje por sitio; la grafica de pastel refleja la distribucion de personal. <strong>Decision tipica.</strong> Identificar plantas rezagadas y equilibrar recursos de capacitacion.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cumplimiento por Planta (%)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Distribucion de Empleados por Planta</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Resumen por Planta</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="04-competencias-por-puesto">04. Competencias por Puesto</h3>
+<p><strong>Objetivo.</strong> Analizar competencias requeridas frente a logradas. <strong>Como leerlo.</strong> Las barras apiladas (cifras oficiales del documento) muestran, por area normativa, las competencias cumplidas y la brecha, cuya suma es el total requerido; la tabla anade el porcentaje. Un segundo grafico apila logradas y brechas por puesto. <strong>Decision tipica.</strong> Enfocar cursos en las areas con mayor brecha relativa (p. ej. IATF y Lean).</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Reporte de Competencias: Cumplidas vs Brecha (barras apiladas)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Reporte de Competencias (Requeridas / Cumplidas / %)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+<tr>
+<td style="text-align: left;">Top 15 Puestos: Competencias Logradas vs Brechas (apiladas = requeridas)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cumplimiento por Clasificacion de Puesto (%)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Competencias por Tipo</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+</tbody>
+</table>
+<h3 id="05-brechas-de-competencias">05. Brechas de Competencias</h3>
+<p><strong>Objetivo.</strong> Localizar donde faltan competencias. <strong>Como leerlo.</strong> El grafico y la tabla de brechas por departamento (cifras del documento) muestran las competencias faltantes; el mapa de calor cruza departamento y tipo de competencia, coloreando las celdas con mas brechas. <strong>Decision tipica.</strong> Construir el Plan Maestro atacando primero las mayores concentraciones de brecha.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Brechas de Competencias por Departamento (documento)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Reporte de Brechas (competencias faltantes)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+<tr>
+<td style="text-align: left;">Mapa de Calor de Brechas (No competentes por Departamento y Tipo)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+<tr>
+<td style="text-align: left;">Top 15 Competencias con Mayor Brecha</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+</tbody>
+</table>
+<h3 id="06-diagnostico-de-necesidades-ddn">06. Diagnóstico de Necesidades (DDN)</h3>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Competente vs No Competente</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Brechas por Prioridad</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Diagnosticos No Competentes (Prioridad Alta)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Evaluaciones Registradas por Mes</td>
+<td style="text-align: left;">Serie de tiempo</td>
+</tr>
+<tr>
+<td style="text-align: left;">Diagnosticos Recientes</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="07-plan-maestro-de-entrenamiento">07. Plan Maestro de Entrenamiento</h3>
+<p><strong>Objetivo.</strong> Seguir la ejecucion del plan anual de capacitacion. <strong>Como leerlo.</strong> El cronograma lista los cursos con su semana, fechas y estatus; la dona y las barras apiladas resumen el estatus por departamento; la tabla muestra el estado de firmas por departamento y anio fiscal. <strong>Decision tipica.</strong> Reprogramar cursos atrasados y completar firmas pendientes.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cronograma de Cursos del Plan Maestro (2026)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+<tr>
+<td style="text-align: left;">Estatus de Cursos Programados</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Planes Maestros Registrados</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Planes Totalmente Firmados</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cursos Completados</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cursos En Curso / Programados</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Estatus de Cursos por Departamento</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan Maestro por Departamento y Año Fiscal</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="08-cursos-programados">08. Cursos Programados</h3>
+<p><strong>Objetivo.</strong> Planear el calendario de cursos. <strong>Como leerlo.</strong> El Calendario ubica cada curso en su fecha; las barras muestran la carga por semana y por anio; la tabla lista los proximos cursos. <strong>Decision tipica.</strong> Balancear la carga de cursos a lo largo del anio y evitar semanas saturadas.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Calendario Anual de Cursos (2026)</td>
+<td style="text-align: left;">Calendario</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cursos Programados por Semana (2026)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cursos por Año Fiscal</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Horas de Capacitación Programadas por Año</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Calendario de Cursos Proximos (2026)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="09-evidencias-digitales">09. Evidencias Digitales</h3>
+<p><strong>Objetivo.</strong> Verificar el soporte documental de la competencia. <strong>Como leerlo.</strong> Las tarjetas resumen evidencias cargadas, porcentaje con evidencia y competentes sin evidencia; las barras y la tabla detallan por departamento y registro. <strong>Decision tipica.</strong> Regularizar expedientes de competentes que aun no tienen evidencia cargada.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Evidencias Cargadas</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Competencias con Evidencia</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Competentes sin Evidencia</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Evidencias por Departamento</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Registro de Evidencias Digitales</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="10-indicadores-iatf-16949">10. Indicadores IATF 16949</h3>
+<p><strong>Objetivo.</strong> Demostrar el cumplimiento de la clausula 7.2/7.3 de IATF 16949. <strong>Como leerlo.</strong> Los medidores muestran el cumplimiento de competencias criticas (tipo Normativa), DDP autorizadas y planes firmados por el Gerente de Planta; la barra de medida detalla por competencia normativa; la tabla resume el estatus normativo por departamento. <strong>Decision tipica.</strong> Cerrar brechas normativas antes de una auditoria de certificacion.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cumplimiento Competencias Criticas (Normativas)</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">DDP Autorizadas (Meta 100%)</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Planes Maestros Firmados por Gerente de Planta</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cumplimiento por Competencia Normativa (%)</td>
+<td style="text-align: left;">Barra de medida</td>
+</tr>
+<tr>
+<td style="text-align: left;">Estatus Normativo por Departamento</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="11-indicadores-iso-9001">11. Indicadores ISO 9001</h3>
+<p><strong>Objetivo.</strong> Evidenciar el control de informacion documentada (clausula 7.5). <strong>Como leerlo.</strong> Los medidores y barras muestran DDP controladas/autorizadas frente a pendientes; la serie de tiempo grafica la creacion de documentos por mes. <strong>Decision tipica.</strong> Asegurar que el 100% de las DDP relevantes esten autorizadas y vigentes.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Documentos Controlados (DDP Autorizadas)</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Descripciones de Puesto Registradas</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Revision Promedio de Documentos</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">DDP Autorizadas vs Pendientes por Departamento</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Estatus Documental de DDP</td>
+<td style="text-align: left;">Grafica de pastel/dona</td>
+</tr>
+<tr>
+<td style="text-align: left;">Documentos Creados por Mes</td>
+<td style="text-align: left;">Serie de tiempo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-trazabilidad-de-autorizaciones">12. Trazabilidad de Autorizaciones</h3>
+<p><strong>Objetivo.</strong> Auditar el flujo de firmas de las DDP. <strong>Como leerlo.</strong> Las tarjetas muestran el tiempo promedio de autorizacion (dias), pendientes de firma y porcentaje autorizado a tiempo; la barra compara el tiempo por departamento; la tabla detalla el flujo creada -&gt; enviada -&gt; autorizada con los dias transcurridos. <strong>Decision tipica.</strong> Agilizar las autorizaciones que exceden la meta de 3 dias.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Tiempo Promedio de Autorización (días)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">DDP Pendientes de Firma</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Autorizadas en &lt;= 3 dias</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tiempo Promedio de Autorización por Departamento (días)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Flujo de Firmas - Autorizaciones Recientes</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-productividad-del-sistema">13. Productividad del Sistema</h3>
+<p><strong>Objetivo.</strong> Cuantificar el impacto de digitalizar el proceso. <strong>Como leerlo.</strong> Las barras comparan el tiempo (minutos) de cada proceso antes (manual) y despues (SEE); las tarjetas resumen la reduccion promedio y las horas ahorradas. <strong>Decision tipica.</strong> Justificar la inversion y replicar la mejora en otros procesos.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Tiempo por Proceso: Antes vs Despues (minutos)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Reduccion Promedio de Tiempo</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Horas Ahorradas (por ciclo completo)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Detalle de Productividad</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-auditorias">14. Auditorías</h3>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">DDP Listas para Auditoria</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">DDP No Listas (sin firma)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">% Documentacion Lista para Auditoria</td>
+<td style="text-align: left;">Medidor (gauge)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Documentos Listos para Auditoria por Departamento</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Checklist de Auditoria (DDP)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h3 id="15-usuarios-activos">15. Usuarios Activos</h3>
+<p><strong>Objetivo.</strong> Monitorear la adopcion del sistema. <strong>Como leerlo.</strong> Las tarjetas resumen el promedio diario, el pico y las sesiones totales; la serie de tiempo y las barras mensuales muestran la tendencia de uso. <strong>Decision tipica.</strong> Detectar caidas de uso que indiquen problemas de adopcion o disponibilidad.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Promedio Usuarios Activos / dia</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Pico Maximo de Usuarios</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sesiones Totales (3 anios)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Usuarios Activos y Sesiones (Serie de Tiempo)</td>
+<td style="text-align: left;">Serie de tiempo</td>
+</tr>
+<tr>
+<td style="text-align: left;">Promedio de Usuarios Activos por Mes</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+</tbody>
+</table>
+<h3 id="16-modulo-de-reportes-predictivos">16. Módulo de Reportes Predictivos</h3>
+<p><strong>Objetivo.</strong> Anticipar riesgos. <strong>Como leerlo.</strong> Las tarjetas alertan sobre competencias/certificaciones por vencer, cursos a programar y departamentos en riesgo; las barras muestran los departamentos de mayor riesgo; la tendencia y la tabla listan lo que vence en los proximos 60 dias. <strong>Decision tipica.</strong> Reprogramar recertificaciones y reforzar departamentos en riesgo antes de que caigan en incumplimiento.</p>
+<p><strong>Paneles:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Panel</th>
+<th style="text-align: left;">Visualizacion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Competencias por Vencer (30 dias)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Empleados con Certificacion por Vencer</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cursos a Programar (proximo mes)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Departamentos en Riesgo (&lt;80%)</td>
+<td style="text-align: left;">Tarjeta KPI</td>
+</tr>
+<tr>
+<td style="text-align: left;">Departamentos con Mayor Riesgo de Incumplimiento (menor % cumplimiento)</td>
+<td style="text-align: left;">Grafica de barras</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tendencia Anual de Cumplimiento del Plan Maestro</td>
+<td style="text-align: left;">Serie de tiempo</td>
+</tr>
+<tr>
+<td style="text-align: left;">Certificaciones Proximas a Vencer (siguientes 60 dias)</td>
+<td style="text-align: left;">Tabla</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-diccionario-de-indicadores-kpis">9. Diccionario de indicadores (KPIs)</h2>
+<p>Cada indicador se define con su formula, meta, frecuencia de revision e interpretacion.
+Los umbrales de color siguen el semaforo: <strong>rojo</strong> (critico), <strong>ambar/amarillo</strong>
+(en observacion) y <strong>verde</strong> (cumple).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">KPI</th>
+<th style="text-align: left;">Formula</th>
+<th style="text-align: center;">Meta</th>
+<th style="text-align: center;">Frec.</th>
+<th style="text-align: left;">Dashboard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>| 1 | % Cumplimiento de competencias | Competencias competentes / evaluadas x 100 | &gt;= 95% | Mensual | Ejecutivo, Depto, Planta |
+| 2 | Empleados activos | Conteo de empleados con estatus activo | - | Diario | Ejecutivo |
+| 3 | Competencias evaluadas | Conteo de ultimas evaluaciones | - | Mensual | Ejecutivo |
+| 4 | % Cumplimiento del Plan Maestro | Cursos completados / (programados no cancelados) x 100 | &gt;= 90% | Mensual | Ejecutivo, Plan Maestro |
+| 5 | % DDP autorizadas | DDP firmadas / registradas x 100 | 100% | Semanal | Ejecutivo, ISO 9001 |
+| 6 | Cumplimiento global (gauge) | Igual que % cumplimiento de competencias | &gt;= 95% | Mensual | Ejecutivo |
+| 7 | Empleados competentes (DDN) | Conteo de competentes (558) | - | Mensual | DDN, Ejecutivo |
+| 8 | Empleados con brecha (DDN) | Conteo de no competentes (42) | 0 | Mensual | DDN |
+| 9 | Brechas de prioridad Alta | No competentes con prioridad Alta | Minimizar | Semanal | DDN |
+| 10 | Cumplimiento por departamento | % competentes por departamento | &gt;= 95% | Mensual | Depto |
+| 11 | Cumplimiento por planta | % competentes por planta | &gt;= 95% | Mensual | Planta |
+| 12 | Competencias requeridas vs logradas | Logradas / requeridas por puesto | &gt;= 95% | Mensual | Competencias por Puesto |
+| 13 | % por clasificacion de puesto | % competentes por clasificacion | &gt;= 95% | Mensual | Competencias por Puesto |
+| 14 | Brechas por departamento | Conteo de faltantes por depto | Reducir | Mensual | Brechas |
+| 15 | Top competencias con brecha | Conteo de no competentes por competencia | Reducir | Mensual | Brechas |
+| 16 | Planes maestros registrados | Conteo de planes | 54 | Anual | Plan Maestro |
+| 17 | % Planes totalmente firmados | Planes con 3 firmas / total x 100 | 100% | Trimestral | Plan Maestro |
+| 18 | Cursos completados | Conteo de cursos con estatus Completado | - | Mensual | Plan Maestro |
+| 19 | Cursos en curso / programados | Conteo con estatus En curso o Programado | - | Mensual | Plan Maestro |
+| 20 | Horas de capacitacion programadas | Suma de horas de cursos por anio | - | Anual | Cursos Programados |
+| 21 | Evidencias cargadas | Conteo de evidencias digitales | - | Mensual | Evidencias |
+| 22 | % Competencias con evidencia | Con evidencia / competentes x 100 | &gt;= 95% | Mensual | Evidencias |
+| 23 | Competentes sin evidencia | Competentes sin ruta de evidencia | 0 | Mensual | Evidencias |
+| 24 | % Competencias criticas (IATF) | % competentes de tipo Normativa | &gt;= 95% | Mensual | IATF 16949 |
+| 25 | % Planes firmados por Gerente | Planes con firma gerente / total x 100 | 100% | Trimestral | IATF 16949 |
+| 26 | Documentos controlados (DDP) | % DDP autorizadas | &gt;= 95% | Mensual | ISO 9001 |
+| 27 | Revision promedio de documentos | Promedio de revisiones de DDP | - | Semestral | ISO 9001 |
+| 28 | Tiempo promedio de autorizacion | Promedio(fecha_aprobacion - fecha_envio) | &lt;= 3 dias | Semanal | Trazabilidad |
+| 29 | DDP pendientes de firma | Conteo de DDP no autorizadas | 0 | Semanal | Trazabilidad |
+| 30 | % Autorizadas en &lt;= 3 dias | DDP autorizadas en 3 dias / autorizadas x 100 | &gt;= 90% | Semanal | Trazabilidad |
+| 31 | Reduccion promedio de tiempo | Promedio((antes - despues)/antes) x 100 | Maximizar | Anual | Productividad |
+| 32 | Horas ahorradas por ciclo | Suma(antes - despues) / 60 | Maximizar | Anual | Productividad |
+| 33 | % Documentacion lista auditoria | DDP autorizadas / total x 100 | &gt;= 95% | Mensual | Auditorias |
+| 34 | Promedio usuarios activos/dia | Promedio de usuarios (90 dias) | - | Diario | Usuarios Activos |
+| 35 | Pico maximo de usuarios | Maximo de usuarios activos | - | Diario | Usuarios Activos |
+| 36 | Sesiones totales (3 anios) | Suma de sesiones | - | Anual | Usuarios Activos |
+| 37 | Competencias por vencer (30 dias) | Competentes con vencimiento en 30 dias | Minimizar | Semanal | Predictivo |
+| 38 | Empleados con certificacion por vencer | Empleados con vencimiento en 60 dias | Minimizar | Semanal | Predictivo |
+| 39 | Departamentos en riesgo (&lt;80%) | Deptos con cumplimiento &lt; 80% | 0 | Mensual | Predictivo |</p>
+<blockquote>
+<p>Total: <strong>39 indicadores</strong> documentados.</p>
+</blockquote>
+<h2 id="10-alineacion-con-iatf-169492016-e-iso-90012015">10. Alineacion con IATF 16949:2016 e ISO 9001:2015</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Requisito normativo</th>
+<th style="text-align: left;">Como lo evidencia la plataforma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>IATF 16949 - 7.2 Competencia</strong></td>
+<td style="text-align: left;">Dashboard <em>Indicadores IATF 16949</em>: % de competencias criticas (tipo Normativa) cumplidas, cumplimiento por competencia y brechas normativas por departamento.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>IATF 16949 - 7.3 Toma de conciencia</strong></td>
+<td style="text-align: left;">Cobertura de capacitacion (Plan Maestro) y seguimiento de asistencia a cursos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>IATF 16949 - 7.2.3 Competencia de auditores</strong></td>
+<td style="text-align: left;">Competencia "Auditoria IATF 16949" monitoreada en el reporte de competencias.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ISO 9001 - 7.5 Informacion documentada</strong></td>
+<td style="text-align: left;">Dashboard <em>Indicadores ISO 9001</em>: DDP como documentos controlados, % autorizadas, revision promedio y creacion de documentos por mes.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ISO 9001 - 7.2 Competencia</strong></td>
+<td style="text-align: left;">Evidencias digitales conservadas y trazabilidad de autorizaciones.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Preparacion para auditoria</strong></td>
+<td style="text-align: left;">Dashboard <em>Auditorias</em>: checklist de DDP listas/no listas y % de documentacion lista.</td>
+</tr>
+</tbody>
+</table>
+<p>La combinacion de estos tableros permite responder a un auditor, en segundos y con
+evidencia, preguntas como: <em>"muestreme el % de personal competente en competencias criticas
+del departamento de Calidad"</em> o <em>"que descripciones de puesto no estan autorizadas"</em>.</p>
+<h2 id="11-modulo-de-reportes-predictivos">11. Modulo de reportes predictivos</h2>
+<p>El dashboard <em>Modulo de Reportes Predictivos</em> anticipa riesgos antes de que se conviertan en
+no conformidades:</p>
+<ul>
+<li><strong>Competencias por vencer (30 dias):</strong> certificaciones proximas a expirar.</li>
+<li><strong>Empleados con certificacion por vencer (60 dias):</strong> para reprogramar recertificaciones.</li>
+<li><strong>Cursos a programar (proximo mes):</strong> carga de trabajo del area de entrenamiento.</li>
+<li><strong>Departamentos en riesgo (&lt; 80%):</strong> focos rojos de incumplimiento.</li>
+<li><strong>Departamentos con mayor riesgo:</strong> ranking ascendente por % de cumplimiento.</li>
+<li><strong>Tendencia anual del Plan Maestro:</strong> evolucion del cumplimiento en el tiempo.</li>
+<li><strong>Tabla de certificaciones proximas a vencer:</strong> con dias restantes por colaborador.</li>
+</ul>
+<p>Este enfoque convierte al SEE de un sistema <em>reactivo</em> a uno <em>preventivo</em>, en linea con el
+pensamiento basado en riesgos de ISO 9001.</p>
+<h2 id="12-casos-de-uso">12. Casos de uso</h2>
+<p>A continuacion, 20 escenarios reales de uso de la plataforma:</p>
+<ol>
+<li><strong>Direccion general</strong> revisa el Dashboard Ejecutivo para conocer el estado global de la
+   capacitacion en un vistazo.</li>
+<li><strong>Gerente de Planta</strong> compara el cumplimiento entre las tres plantas.</li>
+<li><strong>Gerente de departamento</strong> identifica su posicion en el ranking de cumplimiento.</li>
+<li><strong>Coordinador de entrenamiento</strong> localiza las competencias con mayor brecha para priorizar
+   cursos.</li>
+<li><strong>Auditor IATF</strong> verifica el % de competencias criticas cumplidas antes de una auditoria.</li>
+<li><strong>Auditor ISO</strong> confirma que todas las DDP relevantes estan autorizadas.</li>
+<li><strong>RH</strong> da seguimiento a las DDP pendientes de firma y su tiempo de autorizacion.</li>
+<li><strong>Jefe de area</strong> consulta que colaboradores presentan brecha en una competencia especifica.</li>
+<li><strong>Entrenamiento</strong> planea el calendario anual de cursos con la vista de Calendario.</li>
+<li><strong>Control de produccion</strong> revisa el cronograma del Plan Maestro por departamento.</li>
+<li><strong>Calidad</strong> monitorea el % de evidencias digitales cargadas.</li>
+<li><strong>RH</strong> detecta colaboradores competentes sin evidencia para regularizar expedientes.</li>
+<li><strong>Seguridad e higiene</strong> vigila el cumplimiento de la competencia de EPP.</li>
+<li><strong>Direccion</strong> cuantifica el ahorro de tiempo del sistema (dashboard de Productividad).</li>
+<li><strong>Entrenamiento</strong> anticipa recertificaciones con el modulo predictivo (30/60 dias).</li>
+<li><strong>Gerencia</strong> actua sobre los departamentos en riesgo (&lt; 80%).</li>
+<li><strong>Sistemas/TI</strong> monitorea la adopcion del SEE con usuarios activos y sesiones.</li>
+<li><strong>Auditor</strong> exporta el checklist de auditoria de DDP.</li>
+<li><strong>Direccion</strong> evalua la tendencia anual del cumplimiento del Plan Maestro.</li>
+<li><strong>Comite de calidad</strong> usa los tableros como insumo para la revision por la direccion.</li>
+</ol>
+<h2 id="13-resultados-esperados-y-beneficios">13. Resultados esperados y beneficios</h2>
+<ul>
+<li><strong>Visibilidad total y en tiempo real</strong> del estado de la capacitacion (competencias, brechas,
+  cursos, evidencias, autorizaciones).</li>
+<li><strong>93% de cumplimiento</strong> de competencias como linea base medible y comparable.</li>
+<li><strong>Reduccion de tiempos administrativos &gt; 85%</strong> frente al proceso manual (elaboracion y
+  autorizacion de documentos, generacion de planes, consulta de evidencias para auditoria).</li>
+<li><strong>Trazabilidad y evidencia lista para auditoria</strong> IATF/ISO, reduciendo el riesgo de no
+  conformidades.</li>
+<li><strong>Toma de decisiones basada en datos</strong> para priorizar la inversion en capacitacion donde
+  mas impacta.</li>
+<li><strong>Enfoque preventivo</strong> gracias al modulo predictivo (vencimientos y departamentos en riesgo).</li>
+</ul>
+<h2 id="14-conclusiones-y-trabajo-futuro">14. Conclusiones y trabajo futuro</h2>
+<p>La plataforma cumple el objetivo de transformar los datos del SEE en informacion accionable,
+con 16 dashboards, mas de 35 indicadores y alineacion normativa. Como trabajo futuro se
+propone: (a) conectar la plataforma a la base productiva real del SEE; (b) habilitar alertas
+automaticas de Grafana (correo/Slack) ante incumplimientos o vencimientos; (c) incorporar
+autenticacion por roles (Direccion, RH, Auditor, Gerente) mapeada a equipos de Grafana; y
+(d) anadir analitica avanzada (prediccion de brechas con modelos estadisticos).</p>
+<h2 id="15-anexo-a-consultas-sql-documentadas">15. Anexo A: Consultas SQL documentadas</h2>
+<p>Se documentan las consultas que alimentan cada visualizacion. Los parametros <code>$planta</code> y <code>$departamento</code> corresponden a los filtros interactivos; <code>$__timeFilter(campo)</code> aplica el rango de tiempo seleccionado.</p>
+<h3 id="01-dashboard-ejecutivo_1">01. Dashboard Ejecutivo</h3>
+<p><strong>1. Empleados Activos</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM empleados e WHERE activo AND e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)
+</code></pre>
+<p><strong>2. Competencias Evaluadas</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)
+</code></pre>
+<p><strong>3. % Cumplimiento Competencias</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)
+</code></pre>
+<p><strong>4. % Plan Maestro Cumplido</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus&lt;&gt;'Cancelado'),0),1) FROM cursos_programados
+</code></pre>
+<p><strong>5. % DDP Autorizadas</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>6. Cumplimiento Global de Competencias</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento)
+</code></pre>
+<p><strong>7. Cumplimiento Plan Maestro</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus&lt;&gt;'Cancelado'),0),1) FROM cursos_programados
+</code></pre>
+<p><strong>8. Diagnóstico: Competente vs No Competente</strong></p>
+<pre><code class="language-sql">SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS &quot;Competente&quot;, max(CASE WHEN estado='No competente' THEN empleados END) AS &quot;No competente&quot; FROM rep_ddn
+</code></pre>
+<p><strong>9. Cumplimiento por Departamento (%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE e.clave_planta IN ($planta) AND e.id_departamento IN ($departamento) GROUP BY d.departamento ORDER BY cumplimiento DESC
+</code></pre>
+<p><strong>10. Usuarios Activos del Sistema</strong></p>
+<pre><code class="language-sql">SELECT fecha AS &quot;time&quot;, usuarios_activos AS &quot;Usuarios activos&quot; FROM accesos_diarios WHERE $__timeFilter(fecha) ORDER BY fecha
+</code></pre>
+<h3 id="02-cumplimiento-por-departamento_1">02. Cumplimiento por Departamento</h3>
+<p><strong>11. Cumplimiento de Competencias por Departamento (%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY cumplimiento DESC
+</code></pre>
+<p><strong>12. Detalle por Departamento</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS &quot;Departamento&quot;, count(*) AS &quot;Evaluaciones&quot;, sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS &quot;Competentes&quot;, sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS &quot;Brechas&quot;, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS &quot;% Cumplimiento&quot; FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY &quot;% Cumplimiento&quot; DESC
+</code></pre>
+<h3 id="03-cumplimiento-por-planta_1">03. Cumplimiento por Planta</h3>
+<p><strong>13. Cumplimiento por Planta (%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pl.planta, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN plantas pl ON e.clave_planta=pl.clave_planta GROUP BY pl.planta ORDER BY cumplimiento DESC
+</code></pre>
+<p><strong>14. Distribucion de Empleados por Planta</strong></p>
+<pre><code class="language-sql">SELECT pl.planta AS metric, count(*) AS value FROM empleados e JOIN plantas pl ON e.clave_planta=pl.clave_planta WHERE e.activo GROUP BY pl.planta
+</code></pre>
+<p><strong>15. Resumen por Planta</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pl.planta AS &quot;Planta&quot;, pl.ubicacion AS &quot;Ubicacion&quot;, count(DISTINCT e.no_reloj) AS &quot;Empleados&quot;, count(*) AS &quot;Evaluaciones&quot;, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS &quot;% Cumplimiento&quot; FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN plantas pl ON e.clave_planta=pl.clave_planta GROUP BY pl.planta, pl.ubicacion ORDER BY &quot;% Cumplimiento&quot; DESC
+</code></pre>
+<h3 id="04-competencias-por-puesto_1">04. Competencias por Puesto</h3>
+<p><strong>16. Reporte de Competencias: Cumplidas vs Brecha (barras apiladas)</strong></p>
+<pre><code class="language-sql">SELECT competencia AS &quot;Competencia&quot;, cumplidas AS &quot;Cumplidas&quot;, (requeridas-cumplidas) AS &quot;Brecha&quot; FROM rep_competencias ORDER BY requeridas DESC
+</code></pre>
+<p><strong>17. Reporte de Competencias (Requeridas / Cumplidas / %)</strong></p>
+<pre><code class="language-sql">SELECT competencia AS &quot;Competencia&quot;, requeridas AS &quot;Requeridas&quot;, cumplidas AS &quot;Cumplidas&quot;, round(100.0*cumplidas/requeridas,0) AS &quot;% Cumplimiento&quot; FROM rep_competencias ORDER BY &quot;% Cumplimiento&quot; DESC
+</code></pre>
+<p><strong>18. Top 15 Puestos: Competencias Logradas vs Brechas (apiladas = requeridas)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.puesto, sum(CASE WHEN ult.competente THEN 1 ELSE 0 END) AS &quot;Logradas&quot;, sum(CASE WHEN NOT ult.competente THEN 1 ELSE 0 END) AS &quot;Brechas&quot; FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.puesto ORDER BY count(*) DESC LIMIT 15
+</code></pre>
+<p><strong>19. Cumplimiento por Clasificacion de Puesto (%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT pu.clasificacion, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN puestos pu ON e.clave_puesto=pu.clave_puesto GROUP BY pu.clasificacion ORDER BY cumplimiento DESC
+</code></pre>
+<p><strong>20. Competencias por Tipo</strong></p>
+<pre><code class="language-sql">SELECT tipo AS metric, count(*) AS value FROM competencias_puesto GROUP BY tipo
+</code></pre>
+<h3 id="05-brechas-de-competencias_1">05. Brechas de Competencias</h3>
+<p><strong>21. Brechas de Competencias por Departamento (documento)</strong></p>
+<pre><code class="language-sql">SELECT departamento AS &quot;Departamento&quot;, faltantes AS &quot;Competencias faltantes&quot; FROM rep_brechas ORDER BY faltantes DESC
+</code></pre>
+<p><strong>22. Reporte de Brechas (competencias faltantes)</strong></p>
+<pre><code class="language-sql">SELECT departamento AS &quot;Departamento&quot;, faltantes AS &quot;Competencias faltantes&quot; FROM rep_brechas ORDER BY faltantes DESC
+</code></pre>
+<p><strong>23. Mapa de Calor de Brechas (No competentes por Departamento y Tipo)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS &quot;Departamento&quot;, count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Normativa') AS &quot;Normativa&quot;, count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Tecnica') AS &quot;Tecnica&quot;, count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Operativa') AS &quot;Operativa&quot;, count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Blanda') AS &quot;Blanda&quot;, count(*) FILTER (WHERE NOT ult.competente AND cp.tipo='Administrativa') AS &quot;Administrativa&quot;, count(*) FILTER (WHERE NOT ult.competente) AS &quot;Total brechas&quot; FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY &quot;Total brechas&quot; DESC
+</code></pre>
+<p><strong>24. Top 15 Competencias con Mayor Brecha</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT cp.descripcion_competencia, count(*) AS brechas FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE NOT ult.competente GROUP BY cp.descripcion_competencia ORDER BY brechas DESC LIMIT 15
+</code></pre>
+<h3 id="06-diagnostico-de-necesidades-ddn_1">06. Diagnóstico de Necesidades (DDN)</h3>
+<p><strong>25. Competente vs No Competente</strong></p>
+<pre><code class="language-sql">SELECT max(CASE WHEN estado='Competente' THEN empleados END) AS &quot;Competente&quot;, max(CASE WHEN estado='No competente' THEN empleados END) AS &quot;No competente&quot; FROM rep_ddn
+</code></pre>
+<p><strong>26. Brechas por Prioridad</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT prioridad AS metric, count(*) AS value FROM ult WHERE NOT competente GROUP BY prioridad
+</code></pre>
+<p><strong>27. Diagnosticos No Competentes (Prioridad Alta)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE NOT competente AND prioridad='Alta'
+</code></pre>
+<p><strong>28. Evaluaciones Registradas por Mes</strong></p>
+<pre><code class="language-sql">SELECT date_trunc('month', fecha_registro)::date AS &quot;time&quot;, count(*) AS &quot;Evaluaciones&quot;, count(*) FILTER (WHERE NOT competente) AS &quot;No competentes&quot; FROM diagnosticos WHERE $__timeFilter(fecha_registro) GROUP BY 1 ORDER BY 1
+</code></pre>
+<p><strong>29. Diagnosticos Recientes</strong></p>
+<pre><code class="language-sql">SELECT em.nombre AS &quot;Empleado&quot;, d.departamento AS &quot;Departamento&quot;, cp.descripcion_competencia AS &quot;Competencia&quot;, CASE WHEN di.competente THEN 'Si' ELSE 'No' END AS &quot;Competente&quot;, di.prioridad AS &quot;Prioridad&quot;, di.fecha_registro AS &quot;Fecha&quot; FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj JOIN departamentos d ON em.id_departamento=d.id_departamento JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia ORDER BY di.fecha_registro DESC LIMIT 100
+</code></pre>
+<h3 id="07-plan-maestro-de-entrenamiento_1">07. Plan Maestro de Entrenamiento</h3>
+<p><strong>30. Cronograma de Cursos del Plan Maestro (2026)</strong></p>
+<pre><code class="language-sql">SELECT d.departamento AS &quot;Departamento&quot;, c.nombre_curso AS &quot;Curso&quot;, cpr.semana AS &quot;Semana&quot;, cpr.fecha_inicio AS &quot;Inicio&quot;, cpr.fecha_fin AS &quot;Fin&quot;, cpr.estatus AS &quot;Estatus&quot; FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro JOIN departamentos d ON pm.id_departamento=d.id_departamento WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio LIMIT 200
+</code></pre>
+<p><strong>31. Estatus de Cursos Programados</strong></p>
+<pre><code class="language-sql">SELECT estatus AS metric, count(*) AS value FROM cursos_programados GROUP BY estatus
+</code></pre>
+<p><strong>32. Planes Maestros Registrados</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM plan_maestro
+</code></pre>
+<p><strong>33. % Planes Totalmente Firmados</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*count(*) FILTER (WHERE firma_mnj_depto AND firma_mnj_entto AND firma_gerente)/nullif(count(*),0),1) FROM plan_maestro
+</code></pre>
+<p><strong>34. Cursos Completados</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM cursos_programados WHERE estatus='Completado'
+</code></pre>
+<p><strong>35. Cursos En Curso / Programados</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM cursos_programados WHERE estatus IN ('En curso','Programado')
+</code></pre>
+<p><strong>36. Estatus de Cursos por Departamento</strong></p>
+<pre><code class="language-sql">SELECT d.departamento, count(*) FILTER (WHERE cpr.estatus='Completado') AS &quot;Completado&quot;, count(*) FILTER (WHERE cpr.estatus='En curso') AS &quot;En curso&quot;, count(*) FILTER (WHERE cpr.estatus='Programado') AS &quot;Programado&quot;, count(*) FILTER (WHERE cpr.estatus='Cancelado') AS &quot;Cancelado&quot; FROM cursos_programados cpr JOIN plan_maestro pm ON cpr.id_plan_maestro=pm.id_plan_maestro JOIN departamentos d ON pm.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento
+</code></pre>
+<p><strong>37. Plan Maestro por Departamento y Año Fiscal</strong></p>
+<pre><code class="language-sql">SELECT d.departamento AS &quot;Departamento&quot;, pm.anio_fiscal AS &quot;Año Fiscal&quot;, pm.revision AS &quot;Revisión&quot;, CASE WHEN pm.firma_mnj_depto THEN 'Si' ELSE 'No' END AS &quot;Firma MNJ Depto&quot;, CASE WHEN pm.firma_mnj_entto THEN 'Si' ELSE 'No' END AS &quot;Firma MNJ Entto&quot;, CASE WHEN pm.firma_gerente THEN 'Si' ELSE 'No' END AS &quot;Firma Gerente&quot; FROM plan_maestro pm JOIN departamentos d ON pm.id_departamento=d.id_departamento ORDER BY pm.anio_fiscal DESC, d.departamento
+</code></pre>
+<h3 id="08-cursos-programados_1">08. Cursos Programados</h3>
+<p><strong>38. Calendario Anual de Cursos (2026)</strong></p>
+<pre><code class="language-sql">SELECT c.nombre_curso AS name, cpr.fecha_inicio::timestamp AS start_time, cpr.fecha_fin::timestamp AS end_time, cpr.estatus AS estatus FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso WHERE cpr.anio_fiscal=2026 ORDER BY cpr.fecha_inicio
+</code></pre>
+<p><strong>39. Cursos Programados por Semana (2026)</strong></p>
+<pre><code class="language-sql">SELECT semana::text AS &quot;Semana&quot;, count(*) AS &quot;Cursos&quot; FROM cursos_programados WHERE anio_fiscal=2026 GROUP BY semana ORDER BY semana
+</code></pre>
+<p><strong>40. Cursos por Año Fiscal</strong></p>
+<pre><code class="language-sql">SELECT anio_fiscal::text AS &quot;Anio&quot;, count(*) AS &quot;Cursos&quot; FROM cursos_programados GROUP BY anio_fiscal ORDER BY anio_fiscal
+</code></pre>
+<p><strong>41. Horas de Capacitación Programadas por Año</strong></p>
+<pre><code class="language-sql">SELECT cpr.anio_fiscal::text AS &quot;Año&quot;, sum(c.horas) AS &quot;Horas&quot; FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso GROUP BY cpr.anio_fiscal ORDER BY cpr.anio_fiscal
+</code></pre>
+<p><strong>42. Calendario de Cursos Proximos (2026)</strong></p>
+<pre><code class="language-sql">SELECT c.nombre_curso AS &quot;Curso&quot;, cpr.semana AS &quot;Semana&quot;, cpr.fecha_inicio AS &quot;Inicio&quot;, cpr.fecha_fin AS &quot;Fin&quot;, c.horas AS &quot;Horas&quot;, cpr.estatus AS &quot;Estatus&quot; FROM cursos_programados cpr JOIN cursos c ON cpr.id_curso=c.id_curso WHERE cpr.anio_fiscal=2026 AND cpr.estatus IN ('Programado','En curso') ORDER BY cpr.fecha_inicio LIMIT 100
+</code></pre>
+<h3 id="09-evidencias-digitales_1">09. Evidencias Digitales</h3>
+<p><strong>43. Evidencias Cargadas</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM diagnosticos WHERE ruta_evidencia IS NOT NULL
+</code></pre>
+<p><strong>44. % Competencias con Evidencia</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*count(*) FILTER (WHERE ruta_evidencia IS NOT NULL)/nullif(count(*) FILTER (WHERE competente),0),1) FROM ult
+</code></pre>
+<p><strong>45. Competentes sin Evidencia</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE competente AND ruta_evidencia IS NULL
+</code></pre>
+<p><strong>46. Evidencias por Departamento</strong></p>
+<pre><code class="language-sql">SELECT d.departamento, count(*) AS &quot;Evidencias&quot; FROM diagnosticos di JOIN empleados e ON di.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE di.ruta_evidencia IS NOT NULL GROUP BY d.departamento ORDER BY &quot;Evidencias&quot; DESC
+</code></pre>
+<p><strong>47. Registro de Evidencias Digitales</strong></p>
+<pre><code class="language-sql">SELECT em.nombre AS &quot;Empleado&quot;, cp.descripcion_competencia AS &quot;Competencia&quot;, di.ruta_evidencia AS &quot;Ruta Evidencia&quot;, di.fecha_registro AS &quot;Fecha Registro&quot;, di.fecha_vencimiento AS &quot;Vence&quot; FROM diagnosticos di JOIN empleados em ON di.no_reloj=em.no_reloj JOIN competencias_puesto cp ON di.id_competencia=cp.id_competencia WHERE di.ruta_evidencia IS NOT NULL ORDER BY di.fecha_registro DESC LIMIT 150
+</code></pre>
+<h3 id="10-indicadores-iatf-16949_1">10. Indicadores IATF 16949</h3>
+<p><strong>48. Cumplimiento Competencias Criticas (Normativas)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE cp.tipo='Normativa'
+</code></pre>
+<p><strong>49. DDP Autorizadas (Meta 100%)</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>50. Planes Maestros Firmados por Gerente de Planta</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*sum(CASE WHEN firma_gerente THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM plan_maestro
+</code></pre>
+<p><strong>51. Cumplimiento por Competencia Normativa (%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT cp.descripcion_competencia AS metric, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS value FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE cp.tipo='Normativa' GROUP BY cp.descripcion_competencia ORDER BY value DESC
+</code></pre>
+<p><strong>52. Estatus Normativo por Departamento</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento AS &quot;Departamento&quot;, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS &quot;% Competencias Normativas&quot;, count(*) FILTER (WHERE NOT ult.competente) AS &quot;Brechas Normativas&quot; FROM ult JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento WHERE cp.tipo='Normativa' GROUP BY d.departamento ORDER BY &quot;% Competencias Normativas&quot;
+</code></pre>
+<h3 id="11-indicadores-iso-9001_1">11. Indicadores ISO 9001</h3>
+<p><strong>53. Documentos Controlados (DDP Autorizadas)</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>54. Descripciones de Puesto Registradas</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM descripciones_puesto
+</code></pre>
+<p><strong>55. Revision Promedio de Documentos</strong></p>
+<pre><code class="language-sql">SELECT round(avg(revision),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>56. DDP Autorizadas vs Pendientes por Departamento</strong></p>
+<pre><code class="language-sql">SELECT d.departamento, count(*) FILTER (WHERE dp.autorizada) AS &quot;Autorizadas&quot;, count(*) FILTER (WHERE NOT dp.autorizada) AS &quot;Pendientes&quot; FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento
+</code></pre>
+<p><strong>57. Estatus Documental de DDP</strong></p>
+<pre><code class="language-sql">SELECT CASE WHEN autorizada THEN 'Autorizada' ELSE 'Pendiente' END AS metric, count(*) AS value FROM descripciones_puesto GROUP BY 1
+</code></pre>
+<p><strong>58. Documentos Creados por Mes</strong></p>
+<pre><code class="language-sql">SELECT date_trunc('month', fecha_creacion)::date AS &quot;time&quot;, count(*) AS &quot;DDP creadas&quot; FROM descripciones_puesto WHERE $__timeFilter(fecha_creacion) GROUP BY 1 ORDER BY 1
+</code></pre>
+<h3 id="12-trazabilidad-de-autorizaciones_1">12. Trazabilidad de Autorizaciones</h3>
+<p><strong>59. Tiempo Promedio de Autorización (días)</strong></p>
+<pre><code class="language-sql">SELECT round(avg(fecha_aprobacion - fecha_envio),1) FROM descripciones_puesto WHERE autorizada
+</code></pre>
+<p><strong>60. DDP Pendientes de Firma</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM descripciones_puesto WHERE NOT autorizada
+</code></pre>
+<p><strong>61. % Autorizadas en &lt;= 3 dias</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*count(*) FILTER (WHERE (fecha_aprobacion-fecha_envio)&lt;=3)/nullif(count(*) FILTER (WHERE autorizada),0),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>62. Tiempo Promedio de Autorización por Departamento (días)</strong></p>
+<pre><code class="language-sql">SELECT d.departamento, round(avg(dp.fecha_aprobacion - dp.fecha_envio),1) AS dias FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento WHERE dp.autorizada GROUP BY d.departamento ORDER BY dias DESC
+</code></pre>
+<p><strong>63. Flujo de Firmas - Autorizaciones Recientes</strong></p>
+<pre><code class="language-sql">SELECT pu.puesto AS &quot;Puesto&quot;, d.departamento AS &quot;Departamento&quot;, dp.elaborado_por AS &quot;Elaboro&quot;, dp.fecha_creacion AS &quot;Creada&quot;, dp.fecha_envio AS &quot;Enviada a RH&quot;, dp.fecha_aprobacion AS &quot;Autorizada&quot;, (dp.fecha_aprobacion - dp.fecha_envio) AS &quot;Dias&quot;, CASE WHEN dp.autorizada THEN 'Autorizada' ELSE 'Pendiente' END AS &quot;Estatus&quot; FROM descripciones_puesto dp JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto JOIN departamentos d ON dp.id_departamento=d.id_departamento ORDER BY dp.fecha_envio DESC LIMIT 100
+</code></pre>
+<h3 id="13-productividad-del-sistema_1">13. Productividad del Sistema</h3>
+<p><strong>64. Tiempo por Proceso: Antes vs Despues (minutos)</strong></p>
+<pre><code class="language-sql">SELECT proceso AS &quot;Proceso&quot;, tiempo_antes_min AS &quot;Antes (manual)&quot;, tiempo_despues_min AS &quot;Despues (SEE)&quot; FROM metricas_productividad ORDER BY tiempo_antes_min DESC
+</code></pre>
+<p><strong>65. Reduccion Promedio de Tiempo</strong></p>
+<pre><code class="language-sql">SELECT round(avg(100.0*(tiempo_antes_min - tiempo_despues_min)/nullif(tiempo_antes_min,0)),1) FROM metricas_productividad
+</code></pre>
+<p><strong>66. Horas Ahorradas (por ciclo completo)</strong></p>
+<pre><code class="language-sql">SELECT round(sum(tiempo_antes_min - tiempo_despues_min)/60.0,1) FROM metricas_productividad
+</code></pre>
+<p><strong>67. Detalle de Productividad</strong></p>
+<pre><code class="language-sql">SELECT proceso AS &quot;Proceso&quot;, tiempo_antes_min AS &quot;Antes (min)&quot;, tiempo_despues_min AS &quot;Despues (min)&quot;, round(100.0*(tiempo_antes_min - tiempo_despues_min)/nullif(tiempo_antes_min,0),1) AS &quot;% Reduccion&quot; FROM metricas_productividad ORDER BY &quot;% Reduccion&quot; DESC
+</code></pre>
+<h3 id="14-auditorias_1">14. Auditorías</h3>
+<p><strong>68. DDP Listas para Auditoria</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM descripciones_puesto WHERE autorizada
+</code></pre>
+<p><strong>69. DDP No Listas (sin firma)</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM descripciones_puesto WHERE NOT autorizada
+</code></pre>
+<p><strong>70. % Documentacion Lista para Auditoria</strong></p>
+<pre><code class="language-sql">SELECT round(100.0*sum(CASE WHEN autorizada THEN 1 ELSE 0 END)/nullif(count(*),0),1) FROM descripciones_puesto
+</code></pre>
+<p><strong>71. Documentos Listos para Auditoria por Departamento</strong></p>
+<pre><code class="language-sql">SELECT d.departamento, count(*) FILTER (WHERE dp.autorizada) AS &quot;Listos&quot;, count(*) FILTER (WHERE NOT dp.autorizada) AS &quot;No listos&quot; FROM descripciones_puesto dp JOIN departamentos d ON dp.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY d.departamento
+</code></pre>
+<p><strong>72. Checklist de Auditoria (DDP)</strong></p>
+<pre><code class="language-sql">SELECT pu.puesto AS &quot;Puesto&quot;, d.departamento AS &quot;Departamento&quot;, pl.planta AS &quot;Planta&quot;, dp.revision AS &quot;Revision&quot;, CASE WHEN dp.autorizada THEN 'LISTO' ELSE 'PENDIENTE' END AS &quot;Estatus Auditoria&quot;, dp.fecha_aprobacion AS &quot;Fecha Autorizacion&quot; FROM descripciones_puesto dp JOIN puestos pu ON dp.clave_puesto=pu.clave_puesto JOIN departamentos d ON dp.id_departamento=d.id_departamento JOIN plantas pl ON dp.clave_planta=pl.clave_planta ORDER BY dp.autorizada, d.departamento LIMIT 150
+</code></pre>
+<h3 id="15-usuarios-activos_1">15. Usuarios Activos</h3>
+<p><strong>73. Promedio Usuarios Activos / dia</strong></p>
+<pre><code class="language-sql">SELECT round(avg(usuarios_activos),0) FROM accesos_diarios WHERE fecha &gt;= now() - interval '90 days'
+</code></pre>
+<p><strong>74. Pico Maximo de Usuarios</strong></p>
+<pre><code class="language-sql">SELECT max(usuarios_activos) FROM accesos_diarios
+</code></pre>
+<p><strong>75. Sesiones Totales (3 anios)</strong></p>
+<pre><code class="language-sql">SELECT sum(sesiones) FROM accesos_diarios
+</code></pre>
+<p><strong>76. Usuarios Activos y Sesiones (Serie de Tiempo)</strong></p>
+<pre><code class="language-sql">SELECT fecha AS &quot;time&quot;, usuarios_activos AS &quot;Usuarios activos&quot;, sesiones AS &quot;Sesiones&quot; FROM accesos_diarios WHERE $__timeFilter(fecha) ORDER BY fecha
+</code></pre>
+<p><strong>77. Promedio de Usuarios Activos por Mes</strong></p>
+<pre><code class="language-sql">SELECT to_char(date_trunc('month', fecha),'YYYY-MM') AS &quot;Mes&quot;, round(avg(usuarios_activos),0) AS &quot;Promedio&quot; FROM accesos_diarios WHERE fecha &gt;= now() - interval '12 months' GROUP BY 1 ORDER BY 1
+</code></pre>
+<h3 id="16-modulo-de-reportes-predictivos_1">16. Módulo de Reportes Predictivos</h3>
+<p><strong>78. Competencias por Vencer (30 dias)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM ult WHERE competente AND fecha_vencimiento BETWEEN now() AND now() + interval '30 days'
+</code></pre>
+<p><strong>79. Empleados con Certificacion por Vencer</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(DISTINCT no_reloj) FROM ult WHERE competente AND fecha_vencimiento BETWEEN now() AND now() + interval '60 days'
+</code></pre>
+<p><strong>80. Cursos a Programar (proximo mes)</strong></p>
+<pre><code class="language-sql">SELECT count(*) FROM cursos_programados WHERE estatus='Programado' AND fecha_inicio BETWEEN now() AND now() + interval '30 days'
+</code></pre>
+<p><strong>81. Departamentos en Riesgo (&lt;80%)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT count(*) FROM (SELECT e.id_departamento, 100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0) AS pct FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj GROUP BY e.id_departamento) t WHERE pct &lt; 80
+</code></pre>
+<p><strong>82. Departamentos con Mayor Riesgo de Incumplimiento (menor % cumplimiento)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT d.departamento, round(100.0*sum(CASE WHEN ult.competente THEN 1 ELSE 0 END)/nullif(count(*),0),1) AS cumplimiento FROM ult JOIN empleados e ON ult.no_reloj=e.no_reloj JOIN departamentos d ON e.id_departamento=d.id_departamento GROUP BY d.departamento ORDER BY cumplimiento ASC LIMIT 10
+</code></pre>
+<p><strong>83. Tendencia Anual de Cumplimiento del Plan Maestro</strong></p>
+<pre><code class="language-sql">SELECT make_date(anio_fiscal,1,1) AS &quot;time&quot;, round(100.0*count(*) FILTER (WHERE estatus='Completado')/nullif(count(*) FILTER (WHERE estatus&lt;&gt;'Cancelado'),0),1) AS &quot;% Cumplimiento Plan Maestro&quot; FROM cursos_programados GROUP BY anio_fiscal ORDER BY anio_fiscal
+</code></pre>
+<p><strong>84. Certificaciones Proximas a Vencer (siguientes 60 dias)</strong></p>
+<pre><code class="language-sql">WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos ORDER BY no_reloj, id_competencia, fecha_registro DESC) SELECT em.nombre AS &quot;Empleado&quot;, d.departamento AS &quot;Departamento&quot;, cp.descripcion_competencia AS &quot;Competencia&quot;, ult.fecha_vencimiento AS &quot;Vence&quot;, (ult.fecha_vencimiento - CURRENT_DATE) AS &quot;Dias restantes&quot; FROM ult JOIN empleados em ON ult.no_reloj=em.no_reloj JOIN departamentos d ON em.id_departamento=d.id_departamento JOIN competencias_puesto cp ON ult.id_competencia=cp.id_competencia WHERE ult.competente AND ult.fecha_vencimiento BETWEEN now() AND now() + interval '60 days' ORDER BY ult.fecha_vencimiento LIMIT 100
+</code></pre>
+<blockquote>
+<p>Total de consultas documentadas: <strong>84</strong>.</p>
+</blockquote>
+<h2 id="16-anexo-b-guia-de-despliegue-y-acceso">16. Anexo B: Guia de despliegue y acceso</h2>
+<p><strong>Despliegue local (Docker):</strong></p>
+<pre><code class="language-bash">cd import_local
+./importar.sh            # levanta PostgreSQL + Grafana con todo cargado
+</code></pre>
+<p>Acceso: http://localhost:3001 (o el subpath /grafana en la nube).</p>
+<p><strong>Credenciales:</strong>
+- Grafana admin: <code>admin</code> / <code>SEE_admin_2026</code>
+- Base de datos: <code>see_db</code> / <code>see_user</code> / <code>see_pass_2026</code></p>
+<p><strong>Reproducibilidad:</strong> <code>generar_datos.py</code> regenera los datos y <code>generar_dashboards.py</code>
+regenera los 16 tableros; ambos versionados en el repositorio.</p>
+</body>
+</html>

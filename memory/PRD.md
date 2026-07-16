@@ -54,3 +54,13 @@ empleados, 18 departamentos, 150 puestos, ~7,000 competencias y 3 años de histo
 - El renderizado a imagen del dashboard no pudo capturarse por la herramienta de
   screenshot (timeout corto vs. arranque del SPA) ni por image-renderer (sin build arm64),
   pero la funcionalidad quedó verificada vía API/SQL y captura del shell en español.
+
+## Actualizacion (documento entregable) - 2026
+- Alineacion total al documento simulador G2: datos exactos (DDN 558/42 = 93%, reporte de
+  competencias por area, brechas por depto), nombres/orden de dashboards exactos, todo en espanol.
+- Correcciones: datasource jsonData.database=see_db, tipo grafana-postgresql-datasource,
+  unidades de tiempo en espanol, Gantt (plugin archivado) reemplazado por cronograma nativo,
+  Calendario via plugin marcusolsson-calendar-panel, semana::text en barras, keepTime=false.
+- ENTREGABLE "Resultado esperado": /app/import_local/DOCUMENTACION_SEE.md (y .html estilizado):
+  16 dashboards documentados, 39 KPIs, 84 consultas SQL, 20 casos de uso, alineacion IATF/ISO,
+  modulo predictivo. Generadores: generar_documentacion.py + md_a_html.py.
