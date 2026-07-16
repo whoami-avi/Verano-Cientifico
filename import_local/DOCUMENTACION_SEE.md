@@ -116,6 +116,12 @@ brecha (DDN), la atiende con un curso y vuelve a evaluar.
 
 ## 5. Arquitectura tecnica de la solucion
 
+La solucion sigue una arquitectura de tres capas: la fuente de datos, el motor analitico y
+la capa de visualizacion. El siguiente diagrama resume el flujo de la informacion:
+
+<img class="figura" src="assets/arquitectura_see.png" alt="Arquitectura SEE - PostgreSQL - Grafana">
+<p class="figpie">Figura 1. Flujo de datos: el SEE alimenta PostgreSQL, y Grafana consulta la base para presentar los tableros al usuario.</p>
+
 ```
 Navegador  --HTTPS-->  Grafana 13 (OSS)  -->  PostgreSQL 15 (base see_db)
                         |  16 dashboards provisionados

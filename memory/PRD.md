@@ -72,3 +72,16 @@ empleados, 18 departamentos, 150 puestos, ~7,000 competencias y 3 años de histo
   del usuario: GitHub solo es canal de sincronizacion agente<->usuario, no debe aparecer en el doc).
 - Documento regenerado: 8276 palabras (~18 pag), HTML 82 KB. Sincronizacion al Mac del usuario
   via boton "Save to Github" + git pull.
+
+## Actualizacion portada + PDF + diagrama (2026-06)
+- Portada institucional en el HTML (md_a_html.py): logo Instituto Tecnologico de Pochutla,
+  titulo del proyecto, alumno Jefte Abimael Lopez Jarquin (matricula 20161240), docente
+  Dra. Ruth de la Pena Martinez, programa Verano Cientifico, fecha automatica.
+- Diagrama de arquitectura (SEE -> PostgreSQL -> Grafana) generado y embebido como Figura 1
+  (assets/arquitectura_see.png). Assets nuevos en /app/import_local/assets/ (logo_itp.png,
+  arquitectura_see.png) que se sincronizan por git pull.
+- Estilos de impresion @page A4 + aviso (solo pantalla) para exportar a PDF con Chrome y
+  activar "Encabezados y pies de pagina" (numeracion automatica).
+- Verificado visualmente por screenshot (portada + diagrama renderizan correctamente).
+- Pendiente del usuario: subir sus 16 capturas de Grafana (via Drive) para incrustarlas en
+  los espacios "CAPTURA DE GRAFANA".
