@@ -79,7 +79,6 @@ PORTADA = """# Sistema de Entrenamiento Electronico (SEE)
 13. Resultados esperados y beneficios
 14. Conclusiones y trabajo futuro
 15. Anexo A: Consultas SQL documentadas
-16. Anexo B: Guia de despliegue y acceso
 
 ---
 """
@@ -256,8 +255,7 @@ Los umbrales de color siguen el semaforo: **rojo** (critico), **ambar/amarillo**
 (en observacion) y **verde** (cumple).
 
 | # | KPI | Formula | Meta | Frec. | Dashboard |
-| :-: | :-- | :-- | :-: | :-: | :-- |
-"""
+| :-: | :-- | :-- | :-: | :-: | :-- |"""
 
 KPIS = [
  ("% Cumplimiento de competencias", "Competencias competentes / evaluadas x 100", ">= 95%", "Mensual", "Ejecutivo, Depto, Planta"),
@@ -444,30 +442,12 @@ def main():
         kpi.append(f"| {i} | {k[0]} | {k[1]} | {k[2]} | {k[3]} | {k[4]} |")
     kpi.append(f"\n> Total: **{len(KPIS)} indicadores** documentados.\n")
 
-    anexo_b = """## 16. Anexo B: Guia de despliegue y acceso
-
-**Despliegue local (Docker):**
-```bash
-cd import_local
-./importar.sh            # levanta PostgreSQL + Grafana con todo cargado
-```
-Acceso: http://localhost:3001 (o el subpath /grafana en la nube).
-
-**Credenciales:**
-- Grafana admin: `admin` / `SEE_admin_2026`
-- Base de datos: `see_db` / `see_user` / `see_pass_2026`
-
-**Reproducibilidad:** `generar_datos.py` regenera los datos y `generar_dashboards.py`
-regenera los 16 tableros cuando se necesite partir de cero.
-"""
-
     doc = "\n".join([
         PORTADA, RESUMEN, INTRO, SEE, ARQ, MODELO, METODO,
         "\n".join(cat),
         "\n".join(kpi),
         IATF_ISO, PREDICTIVO, CASOS, RESULTADOS,
         "\n".join(anexo),
-        anexo_b,
     ])
     open(OUT, "w").write(doc)
     words = len(doc.split())

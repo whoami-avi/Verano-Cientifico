@@ -86,7 +86,13 @@ empleados, 18 departamentos, 150 puestos, ~7,000 competencias y 3 años de histo
 - Pendiente del usuario: subir sus 16 capturas de Grafana (via Drive) para incrustarlas en
   los espacios "CAPTURA DE GRAFANA".
 
-## Capturas incrustadas (2026-06)
+## Ajuste alineacion al PDF (2026-06)
+- Bug corregido: la tabla del Diccionario de KPIs se rompia (renderizaba como texto con pipes)
+  por doble salto de linea tras la fila separadora en KPI_HEAD; se elimino el \n final.
+- Se elimino "Anexo B: Guia de despliegue y acceso" (y su item del indice) porque el
+  simulador G2.pdf NO lo pide en el "Resultado esperado". El PDF solo pide: +20 dashboards,
+  ~35 KPIs, ~40 SQL, ~20 casos de uso, diccionario de indicadores e interpretacion tecnica.
+- Documento estrictamente apegado al PDF; 15 secciones (Anexo A SQL es la ultima).
 - Se descargaron las 16 capturas de Grafana del Drive del usuario y se guardaron en
   /app/import_local/assets/capturas/ (01.png ... 16.png), mapeadas 1:1 al orden de tableros.
 - generar_documentacion.py ahora incrusta cada captura como <img class="figura shot"> bajo su

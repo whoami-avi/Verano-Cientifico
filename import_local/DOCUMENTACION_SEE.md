@@ -25,7 +25,6 @@
 13. Resultados esperados y beneficios
 14. Conclusiones y trabajo futuro
 15. Anexo A: Consultas SQL documentadas
-16. Anexo B: Guia de despliegue y acceso
 
 ---
 
@@ -472,7 +471,6 @@ Los umbrales de color siguen el semaforo: **rojo** (critico), **ambar/amarillo**
 
 | # | KPI | Formula | Meta | Frec. | Dashboard |
 | :-: | :-- | :-- | :-: | :-: | :-- |
-
 | 1 | % Cumplimiento de competencias | Competencias competentes / evaluadas x 100 | >= 95% | Mensual | Ejecutivo, Depto, Planta |
 | 2 | Empleados activos | Conteo de empleados con estatus activo | - | Diario | Ejecutivo |
 | 3 | Competencias evaluadas | Conteo de ultimas evaluaciones | - | Mensual | Ejecutivo |
@@ -1137,19 +1135,3 @@ WITH ult AS (SELECT DISTINCT ON (no_reloj, id_competencia) * FROM diagnosticos O
 
 
 > Total de consultas documentadas: **84**.
-
-## 16. Anexo B: Guia de despliegue y acceso
-
-**Despliegue local (Docker):**
-```bash
-cd import_local
-./importar.sh            # levanta PostgreSQL + Grafana con todo cargado
-```
-Acceso: http://localhost:3001 (o el subpath /grafana en la nube).
-
-**Credenciales:**
-- Grafana admin: `admin` / `SEE_admin_2026`
-- Base de datos: `see_db` / `see_user` / `see_pass_2026`
-
-**Reproducibilidad:** `generar_datos.py` regenera los datos y `generar_dashboards.py`
-regenera los 16 tableros cuando se necesite partir de cero.

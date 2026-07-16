@@ -117,7 +117,6 @@
 <li>Resultados esperados y beneficios</li>
 <li>Conclusiones y trabajo futuro</li>
 <li>Anexo A: Consultas SQL documentadas</li>
-<li>Anexo B: Guia de despliegue y acceso</li>
 </ol>
 <hr />
 <h2 id="1-resumen-ejecutivo">1. Resumen ejecutivo</h2>
@@ -938,54 +937,319 @@ Los umbrales de color siguen el semaforo: <strong>rojo</strong> (critico), <stro
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">% Cumplimiento de competencias</td>
+<td style="text-align: left;">Competencias competentes / evaluadas x 100</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Ejecutivo, Depto, Planta</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">Empleados activos</td>
+<td style="text-align: left;">Conteo de empleados con estatus activo</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Diario</td>
+<td style="text-align: left;">Ejecutivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Competencias evaluadas</td>
+<td style="text-align: left;">Conteo de ultimas evaluaciones</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Ejecutivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">% Cumplimiento del Plan Maestro</td>
+<td style="text-align: left;">Cursos completados / (programados no cancelados) x 100</td>
+<td style="text-align: center;">&gt;= 90%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Ejecutivo, Plan Maestro</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">% DDP autorizadas</td>
+<td style="text-align: left;">DDP firmadas / registradas x 100</td>
+<td style="text-align: center;">100%</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Ejecutivo, ISO 9001</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">Cumplimiento global (gauge)</td>
+<td style="text-align: left;">Igual que % cumplimiento de competencias</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Ejecutivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">Empleados competentes (DDN)</td>
+<td style="text-align: left;">Conteo de competentes (558)</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">DDN, Ejecutivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">Empleados con brecha (DDN)</td>
+<td style="text-align: left;">Conteo de no competentes (42)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">DDN</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;">Brechas de prioridad Alta</td>
+<td style="text-align: left;">No competentes con prioridad Alta</td>
+<td style="text-align: center;">Minimizar</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">DDN</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">Cumplimiento por departamento</td>
+<td style="text-align: left;">% competentes por departamento</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Depto</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td style="text-align: left;">Cumplimiento por planta</td>
+<td style="text-align: left;">% competentes por planta</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Planta</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">Competencias requeridas vs logradas</td>
+<td style="text-align: left;">Logradas / requeridas por puesto</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Competencias por Puesto</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: left;">% por clasificacion de puesto</td>
+<td style="text-align: left;">% competentes por clasificacion</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Competencias por Puesto</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">Brechas por departamento</td>
+<td style="text-align: left;">Conteo de faltantes por depto</td>
+<td style="text-align: center;">Reducir</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Brechas</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: left;">Top competencias con brecha</td>
+<td style="text-align: left;">Conteo de no competentes por competencia</td>
+<td style="text-align: center;">Reducir</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Brechas</td>
+</tr>
+<tr>
+<td style="text-align: center;">16</td>
+<td style="text-align: left;">Planes maestros registrados</td>
+<td style="text-align: left;">Conteo de planes</td>
+<td style="text-align: center;">54</td>
+<td style="text-align: center;">Anual</td>
+<td style="text-align: left;">Plan Maestro</td>
+</tr>
+<tr>
+<td style="text-align: center;">17</td>
+<td style="text-align: left;">% Planes totalmente firmados</td>
+<td style="text-align: left;">Planes con 3 firmas / total x 100</td>
+<td style="text-align: center;">100%</td>
+<td style="text-align: center;">Trimestral</td>
+<td style="text-align: left;">Plan Maestro</td>
+</tr>
+<tr>
+<td style="text-align: center;">18</td>
+<td style="text-align: left;">Cursos completados</td>
+<td style="text-align: left;">Conteo de cursos con estatus Completado</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Plan Maestro</td>
+</tr>
+<tr>
+<td style="text-align: center;">19</td>
+<td style="text-align: left;">Cursos en curso / programados</td>
+<td style="text-align: left;">Conteo con estatus En curso o Programado</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Plan Maestro</td>
+</tr>
+<tr>
+<td style="text-align: center;">20</td>
+<td style="text-align: left;">Horas de capacitacion programadas</td>
+<td style="text-align: left;">Suma de horas de cursos por anio</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Anual</td>
+<td style="text-align: left;">Cursos Programados</td>
+</tr>
+<tr>
+<td style="text-align: center;">21</td>
+<td style="text-align: left;">Evidencias cargadas</td>
+<td style="text-align: left;">Conteo de evidencias digitales</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Evidencias</td>
+</tr>
+<tr>
+<td style="text-align: center;">22</td>
+<td style="text-align: left;">% Competencias con evidencia</td>
+<td style="text-align: left;">Con evidencia / competentes x 100</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Evidencias</td>
+</tr>
+<tr>
+<td style="text-align: center;">23</td>
+<td style="text-align: left;">Competentes sin evidencia</td>
+<td style="text-align: left;">Competentes sin ruta de evidencia</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Evidencias</td>
+</tr>
+<tr>
+<td style="text-align: center;">24</td>
+<td style="text-align: left;">% Competencias criticas (IATF)</td>
+<td style="text-align: left;">% competentes de tipo Normativa</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">IATF 16949</td>
+</tr>
+<tr>
+<td style="text-align: center;">25</td>
+<td style="text-align: left;">% Planes firmados por Gerente</td>
+<td style="text-align: left;">Planes con firma gerente / total x 100</td>
+<td style="text-align: center;">100%</td>
+<td style="text-align: center;">Trimestral</td>
+<td style="text-align: left;">IATF 16949</td>
+</tr>
+<tr>
+<td style="text-align: center;">26</td>
+<td style="text-align: left;">Documentos controlados (DDP)</td>
+<td style="text-align: left;">% DDP autorizadas</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">ISO 9001</td>
+</tr>
+<tr>
+<td style="text-align: center;">27</td>
+<td style="text-align: left;">Revision promedio de documentos</td>
+<td style="text-align: left;">Promedio de revisiones de DDP</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Semestral</td>
+<td style="text-align: left;">ISO 9001</td>
+</tr>
+<tr>
+<td style="text-align: center;">28</td>
+<td style="text-align: left;">Tiempo promedio de autorizacion</td>
+<td style="text-align: left;">Promedio(fecha_aprobacion - fecha_envio)</td>
+<td style="text-align: center;">&lt;= 3 dias</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Trazabilidad</td>
+</tr>
+<tr>
+<td style="text-align: center;">29</td>
+<td style="text-align: left;">DDP pendientes de firma</td>
+<td style="text-align: left;">Conteo de DDP no autorizadas</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Trazabilidad</td>
+</tr>
+<tr>
+<td style="text-align: center;">30</td>
+<td style="text-align: left;">% Autorizadas en &lt;= 3 dias</td>
+<td style="text-align: left;">DDP autorizadas en 3 dias / autorizadas x 100</td>
+<td style="text-align: center;">&gt;= 90%</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Trazabilidad</td>
+</tr>
+<tr>
+<td style="text-align: center;">31</td>
+<td style="text-align: left;">Reduccion promedio de tiempo</td>
+<td style="text-align: left;">Promedio((antes - despues)/antes) x 100</td>
+<td style="text-align: center;">Maximizar</td>
+<td style="text-align: center;">Anual</td>
+<td style="text-align: left;">Productividad</td>
+</tr>
+<tr>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">Horas ahorradas por ciclo</td>
+<td style="text-align: left;">Suma(antes - despues) / 60</td>
+<td style="text-align: center;">Maximizar</td>
+<td style="text-align: center;">Anual</td>
+<td style="text-align: left;">Productividad</td>
+</tr>
+<tr>
+<td style="text-align: center;">33</td>
+<td style="text-align: left;">% Documentacion lista auditoria</td>
+<td style="text-align: left;">DDP autorizadas / total x 100</td>
+<td style="text-align: center;">&gt;= 95%</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Auditorias</td>
+</tr>
+<tr>
+<td style="text-align: center;">34</td>
+<td style="text-align: left;">Promedio usuarios activos/dia</td>
+<td style="text-align: left;">Promedio de usuarios (90 dias)</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Diario</td>
+<td style="text-align: left;">Usuarios Activos</td>
+</tr>
+<tr>
+<td style="text-align: center;">35</td>
+<td style="text-align: left;">Pico maximo de usuarios</td>
+<td style="text-align: left;">Maximo de usuarios activos</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Diario</td>
+<td style="text-align: left;">Usuarios Activos</td>
+</tr>
+<tr>
+<td style="text-align: center;">36</td>
+<td style="text-align: left;">Sesiones totales (3 anios)</td>
+<td style="text-align: left;">Suma de sesiones</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Anual</td>
+<td style="text-align: left;">Usuarios Activos</td>
+</tr>
+<tr>
+<td style="text-align: center;">37</td>
+<td style="text-align: left;">Competencias por vencer (30 dias)</td>
+<td style="text-align: left;">Competentes con vencimiento en 30 dias</td>
+<td style="text-align: center;">Minimizar</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Predictivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">38</td>
+<td style="text-align: left;">Empleados con certificacion por vencer</td>
+<td style="text-align: left;">Empleados con vencimiento en 60 dias</td>
+<td style="text-align: center;">Minimizar</td>
+<td style="text-align: center;">Semanal</td>
+<td style="text-align: left;">Predictivo</td>
+</tr>
+<tr>
+<td style="text-align: center;">39</td>
+<td style="text-align: left;">Departamentos en riesgo (&lt;80%)</td>
+<td style="text-align: left;">Deptos con cumplimiento &lt; 80%</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">Mensual</td>
+<td style="text-align: left;">Predictivo</td>
 </tr>
 </tbody>
 </table>
-<p>| 1 | % Cumplimiento de competencias | Competencias competentes / evaluadas x 100 | &gt;= 95% | Mensual | Ejecutivo, Depto, Planta |
-| 2 | Empleados activos | Conteo de empleados con estatus activo | - | Diario | Ejecutivo |
-| 3 | Competencias evaluadas | Conteo de ultimas evaluaciones | - | Mensual | Ejecutivo |
-| 4 | % Cumplimiento del Plan Maestro | Cursos completados / (programados no cancelados) x 100 | &gt;= 90% | Mensual | Ejecutivo, Plan Maestro |
-| 5 | % DDP autorizadas | DDP firmadas / registradas x 100 | 100% | Semanal | Ejecutivo, ISO 9001 |
-| 6 | Cumplimiento global (gauge) | Igual que % cumplimiento de competencias | &gt;= 95% | Mensual | Ejecutivo |
-| 7 | Empleados competentes (DDN) | Conteo de competentes (558) | - | Mensual | DDN, Ejecutivo |
-| 8 | Empleados con brecha (DDN) | Conteo de no competentes (42) | 0 | Mensual | DDN |
-| 9 | Brechas de prioridad Alta | No competentes con prioridad Alta | Minimizar | Semanal | DDN |
-| 10 | Cumplimiento por departamento | % competentes por departamento | &gt;= 95% | Mensual | Depto |
-| 11 | Cumplimiento por planta | % competentes por planta | &gt;= 95% | Mensual | Planta |
-| 12 | Competencias requeridas vs logradas | Logradas / requeridas por puesto | &gt;= 95% | Mensual | Competencias por Puesto |
-| 13 | % por clasificacion de puesto | % competentes por clasificacion | &gt;= 95% | Mensual | Competencias por Puesto |
-| 14 | Brechas por departamento | Conteo de faltantes por depto | Reducir | Mensual | Brechas |
-| 15 | Top competencias con brecha | Conteo de no competentes por competencia | Reducir | Mensual | Brechas |
-| 16 | Planes maestros registrados | Conteo de planes | 54 | Anual | Plan Maestro |
-| 17 | % Planes totalmente firmados | Planes con 3 firmas / total x 100 | 100% | Trimestral | Plan Maestro |
-| 18 | Cursos completados | Conteo de cursos con estatus Completado | - | Mensual | Plan Maestro |
-| 19 | Cursos en curso / programados | Conteo con estatus En curso o Programado | - | Mensual | Plan Maestro |
-| 20 | Horas de capacitacion programadas | Suma de horas de cursos por anio | - | Anual | Cursos Programados |
-| 21 | Evidencias cargadas | Conteo de evidencias digitales | - | Mensual | Evidencias |
-| 22 | % Competencias con evidencia | Con evidencia / competentes x 100 | &gt;= 95% | Mensual | Evidencias |
-| 23 | Competentes sin evidencia | Competentes sin ruta de evidencia | 0 | Mensual | Evidencias |
-| 24 | % Competencias criticas (IATF) | % competentes de tipo Normativa | &gt;= 95% | Mensual | IATF 16949 |
-| 25 | % Planes firmados por Gerente | Planes con firma gerente / total x 100 | 100% | Trimestral | IATF 16949 |
-| 26 | Documentos controlados (DDP) | % DDP autorizadas | &gt;= 95% | Mensual | ISO 9001 |
-| 27 | Revision promedio de documentos | Promedio de revisiones de DDP | - | Semestral | ISO 9001 |
-| 28 | Tiempo promedio de autorizacion | Promedio(fecha_aprobacion - fecha_envio) | &lt;= 3 dias | Semanal | Trazabilidad |
-| 29 | DDP pendientes de firma | Conteo de DDP no autorizadas | 0 | Semanal | Trazabilidad |
-| 30 | % Autorizadas en &lt;= 3 dias | DDP autorizadas en 3 dias / autorizadas x 100 | &gt;= 90% | Semanal | Trazabilidad |
-| 31 | Reduccion promedio de tiempo | Promedio((antes - despues)/antes) x 100 | Maximizar | Anual | Productividad |
-| 32 | Horas ahorradas por ciclo | Suma(antes - despues) / 60 | Maximizar | Anual | Productividad |
-| 33 | % Documentacion lista auditoria | DDP autorizadas / total x 100 | &gt;= 95% | Mensual | Auditorias |
-| 34 | Promedio usuarios activos/dia | Promedio de usuarios (90 dias) | - | Diario | Usuarios Activos |
-| 35 | Pico maximo de usuarios | Maximo de usuarios activos | - | Diario | Usuarios Activos |
-| 36 | Sesiones totales (3 anios) | Suma de sesiones | - | Anual | Usuarios Activos |
-| 37 | Competencias por vencer (30 dias) | Competentes con vencimiento en 30 dias | Minimizar | Semanal | Predictivo |
-| 38 | Empleados con certificacion por vencer | Empleados con vencimiento en 60 dias | Minimizar | Semanal | Predictivo |
-| 39 | Departamentos en riesgo (&lt;80%) | Deptos con cumplimiento &lt; 80% | 0 | Mensual | Predictivo |</p>
 <blockquote>
 <p>Total: <strong>39 indicadores</strong> documentados.</p>
 </blockquote>
@@ -1360,16 +1624,5 @@ autenticacion por roles (Direccion, RH, Auditor, Gerente) mapeada a equipos de G
 <blockquote>
 <p>Total de consultas documentadas: <strong>84</strong>.</p>
 </blockquote>
-<h2 id="16-anexo-b-guia-de-despliegue-y-acceso">16. Anexo B: Guia de despliegue y acceso</h2>
-<p><strong>Despliegue local (Docker):</strong></p>
-<pre><code class="language-bash">cd import_local
-./importar.sh            # levanta PostgreSQL + Grafana con todo cargado
-</code></pre>
-<p>Acceso: http://localhost:3001 (o el subpath /grafana en la nube).</p>
-<p><strong>Credenciales:</strong>
-- Grafana admin: <code>admin</code> / <code>SEE_admin_2026</code>
-- Base de datos: <code>see_db</code> / <code>see_user</code> / <code>see_pass_2026</code></p>
-<p><strong>Reproducibilidad:</strong> <code>generar_datos.py</code> regenera los datos y <code>generar_dashboards.py</code>
-regenera los 16 tableros cuando se necesite partir de cero.</p>
 </body>
 </html>
