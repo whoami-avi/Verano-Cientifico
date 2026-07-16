@@ -64,3 +64,11 @@ empleados, 18 departamentos, 150 puestos, ~7,000 competencias y 3 años de histo
 - ENTREGABLE "Resultado esperado": /app/import_local/DOCUMENTACION_SEE.md (y .html estilizado):
   16 dashboards documentados, 39 KPIs, 84 consultas SQL, 20 casos de uso, alineacion IATF/ISO,
   modulo predictivo. Generadores: generar_documentacion.py + md_a_html.py.
+
+## Actualizacion documento - humanizacion y capturas (2026-06)
+- Se agregaron 16 espacios/placeholders "CAPTURA DE GRAFANA" (uno por tablero) con marco
+  punteado en el HTML (.captura) para que el usuario pegue sus propias capturas de localhost:3001.
+- Se eliminaron todas las referencias a Git/repositorio del contenido del documento (peticion
+  del usuario: GitHub solo es canal de sincronizacion agente<->usuario, no debe aparecer en el doc).
+- Documento regenerado: 8276 palabras (~18 pag), HTML 82 KB. Sincronizacion al Mac del usuario
+  via boton "Save to Github" + git pull.

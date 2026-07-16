@@ -40,6 +40,11 @@ html = """<!DOCTYPE html>
                margin: 16px 0; padding: 8px 16px; color: #33475b; }
   hr { border: none; border-top: 1px solid #d5dee8; margin: 28px 0; }
   strong { color: #12324f; }
+  .captura { border: 2px dashed var(--azul2); background: #eef4fb; border-radius: 10px;
+             text-align: center; color: var(--azul); font-weight: 700; letter-spacing: .5px;
+             padding: 46px 20px; margin: 18px 0; font-size: 15px; page-break-inside: avoid; }
+  .captura span { display: block; margin-top: 8px; font-weight: 400; font-size: 13px;
+                  color: #5b6b7d; letter-spacing: 0; }
   @media print {
     body { padding: 0; font-size: 12px; max-width: none; }
     h1 { font-size: 24px; } h2 { font-size: 18px; } h3 { font-size: 15px; }

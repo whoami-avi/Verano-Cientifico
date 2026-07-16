@@ -29,6 +29,11 @@
                margin: 16px 0; padding: 8px 16px; color: #33475b; }
   hr { border: none; border-top: 1px solid #d5dee8; margin: 28px 0; }
   strong { color: #12324f; }
+  .captura { border: 2px dashed var(--azul2); background: #eef4fb; border-radius: 10px;
+             text-align: center; color: var(--azul); font-weight: 700; letter-spacing: .5px;
+             padding: 46px 20px; margin: 18px 0; font-size: 15px; page-break-inside: avoid; }
+  .captura span { display: block; margin-top: 8px; font-weight: 400; font-size: 13px;
+                  color: #5b6b7d; letter-spacing: 0; }
   @media print {
     body { padding: 0; font-size: 12px; max-width: none; }
     h1 { font-size: 24px; } h2 { font-size: 18px; } h3 { font-size: 15px; }
@@ -143,8 +148,8 @@ brecha (DDN), la atiende con un curso y vuelve a evaluar.</p>
 </code></pre>
 <ul>
 <li><strong>Grafana 13 (OSS):</strong> motor de visualizacion. Los dashboards y la fuente de datos se
-  cargan por <em>aprovisionamiento</em> (archivos versionables), lo que hace el despliegue
-  reproducible y controlado por Git.</li>
+  cargan por <em>aprovisionamiento</em> (archivos de configuracion), lo que hace el despliegue
+  reproducible y facil de mantener.</li>
 <li><strong>PostgreSQL 15:</strong> almacen analitico. Cada panel ejecuta una consulta SQL directa.</li>
 <li><strong>Docker Compose:</strong> orquesta ambos servicios en un solo comando; incluye el plugin
   <em>Business Calendar</em> para la vista de calendario.</li>
@@ -273,6 +278,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 <p>La solucion entrega 16 tableros organizados en la carpeta <em>SEE - Sistema de Entrenamiento</em>. Para cada uno se indica su objetivo, sus paneles y como interpretarlo.</p>
 <h3 id="01-dashboard-ejecutivo">01. Dashboard Ejecutivo</h3>
 <p><strong>Objetivo.</strong> Ofrecer a la direccion una vista integral del estado del SEE en una sola pantalla. <strong>Como leerlo.</strong> Las tarjetas superiores resumen los cuatro indicadores clave (empleados activos, cumplimiento de competencias, avance del Plan Maestro y DDP autorizadas); los medidores muestran el semaforo global; la dona compara competentes contra brechas; las barras ordenan a los departamentos de mayor a menor cumplimiento; y la serie de tiempo evidencia la adopcion del sistema. Los filtros de Planta y Departamento permiten acotar todo el tablero. <strong>Decision tipica.</strong> Detectar de inmediato si algun indicador global esta en rojo y en que area concentrarse.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;01. Dashboard Ejecutivo&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -326,6 +333,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="02-cumplimiento-por-departamento">02. Cumplimiento por Departamento</h3>
 <p><strong>Objetivo.</strong> Comparar el desempeno de los 18 departamentos. <strong>Como leerlo.</strong> La barra horizontal ordena de mayor a menor cumplimiento; la tabla detalla evaluaciones, competentes, brechas y porcentaje. La columna de brechas se colorea para resaltar los focos de atencion. <strong>Decision tipica.</strong> Priorizar apoyo a los departamentos por debajo de la meta (&gt;= 95%).</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;02. Cumplimiento por Departamento&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -347,6 +356,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="03-cumplimiento-por-planta">03. Cumplimiento por Planta</h3>
 <p><strong>Objetivo.</strong> Evaluar el desempeno entre las tres plantas. <strong>Como leerlo.</strong> Las barras y la tabla muestran el porcentaje por sitio; la grafica de pastel refleja la distribucion de personal. <strong>Decision tipica.</strong> Identificar plantas rezagadas y equilibrar recursos de capacitacion.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;03. Cumplimiento por Planta&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -372,6 +383,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="04-competencias-por-puesto">04. Competencias por Puesto</h3>
 <p><strong>Objetivo.</strong> Analizar competencias requeridas frente a logradas. <strong>Como leerlo.</strong> Las barras apiladas (cifras oficiales del documento) muestran, por area normativa, las competencias cumplidas y la brecha, cuya suma es el total requerido; la tabla anade el porcentaje. Un segundo grafico apila logradas y brechas por puesto. <strong>Decision tipica.</strong> Enfocar cursos en las areas con mayor brecha relativa (p. ej. IATF y Lean).</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;04. Competencias por Puesto&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -405,6 +418,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="05-brechas-de-competencias">05. Brechas de Competencias</h3>
 <p><strong>Objetivo.</strong> Localizar donde faltan competencias. <strong>Como leerlo.</strong> El grafico y la tabla de brechas por departamento (cifras del documento) muestran las competencias faltantes; el mapa de calor cruza departamento y tipo de competencia, coloreando las celdas con mas brechas. <strong>Decision tipica.</strong> Construir el Plan Maestro atacando primero las mayores concentraciones de brecha.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;05. Brechas de Competencias&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -433,6 +448,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </tbody>
 </table>
 <h3 id="06-diagnostico-de-necesidades-ddn">06. Diagnóstico de Necesidades (DDN)</h3>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;06. Diagnóstico de Necesidades (DDN)&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -466,6 +483,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="07-plan-maestro-de-entrenamiento">07. Plan Maestro de Entrenamiento</h3>
 <p><strong>Objetivo.</strong> Seguir la ejecucion del plan anual de capacitacion. <strong>Como leerlo.</strong> El cronograma lista los cursos con su semana, fechas y estatus; la dona y las barras apiladas resumen el estatus por departamento; la tabla muestra el estado de firmas por departamento y anio fiscal. <strong>Decision tipica.</strong> Reprogramar cursos atrasados y completar firmas pendientes.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;07. Plan Maestro de Entrenamiento&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -511,6 +530,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="08-cursos-programados">08. Cursos Programados</h3>
 <p><strong>Objetivo.</strong> Planear el calendario de cursos. <strong>Como leerlo.</strong> El Calendario ubica cada curso en su fecha; las barras muestran la carga por semana y por anio; la tabla lista los proximos cursos. <strong>Decision tipica.</strong> Balancear la carga de cursos a lo largo del anio y evitar semanas saturadas.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;08. Cursos Programados&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -544,6 +565,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="09-evidencias-digitales">09. Evidencias Digitales</h3>
 <p><strong>Objetivo.</strong> Verificar el soporte documental de la competencia. <strong>Como leerlo.</strong> Las tarjetas resumen evidencias cargadas, porcentaje con evidencia y competentes sin evidencia; las barras y la tabla detallan por departamento y registro. <strong>Decision tipica.</strong> Regularizar expedientes de competentes que aun no tienen evidencia cargada.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;09. Evidencias Digitales&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -577,6 +600,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="10-indicadores-iatf-16949">10. Indicadores IATF 16949</h3>
 <p><strong>Objetivo.</strong> Demostrar el cumplimiento de la clausula 7.2/7.3 de IATF 16949. <strong>Como leerlo.</strong> Los medidores muestran el cumplimiento de competencias criticas (tipo Normativa), DDP autorizadas y planes firmados por el Gerente de Planta; la barra de medida detalla por competencia normativa; la tabla resume el estatus normativo por departamento. <strong>Decision tipica.</strong> Cerrar brechas normativas antes de una auditoria de certificacion.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;10. Indicadores IATF 16949&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -610,6 +635,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="11-indicadores-iso-9001">11. Indicadores ISO 9001</h3>
 <p><strong>Objetivo.</strong> Evidenciar el control de informacion documentada (clausula 7.5). <strong>Como leerlo.</strong> Los medidores y barras muestran DDP controladas/autorizadas frente a pendientes; la serie de tiempo grafica la creacion de documentos por mes. <strong>Decision tipica.</strong> Asegurar que el 100% de las DDP relevantes esten autorizadas y vigentes.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;11. Indicadores ISO 9001&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -647,6 +674,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="12-trazabilidad-de-autorizaciones">12. Trazabilidad de Autorizaciones</h3>
 <p><strong>Objetivo.</strong> Auditar el flujo de firmas de las DDP. <strong>Como leerlo.</strong> Las tarjetas muestran el tiempo promedio de autorizacion (dias), pendientes de firma y porcentaje autorizado a tiempo; la barra compara el tiempo por departamento; la tabla detalla el flujo creada -&gt; enviada -&gt; autorizada con los dias transcurridos. <strong>Decision tipica.</strong> Agilizar las autorizaciones que exceden la meta de 3 dias.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;12. Trazabilidad de Autorizaciones&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -680,6 +709,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="13-productividad-del-sistema">13. Productividad del Sistema</h3>
 <p><strong>Objetivo.</strong> Cuantificar el impacto de digitalizar el proceso. <strong>Como leerlo.</strong> Las barras comparan el tiempo (minutos) de cada proceso antes (manual) y despues (SEE); las tarjetas resumen la reduccion promedio y las horas ahorradas. <strong>Decision tipica.</strong> Justificar la inversion y replicar la mejora en otros procesos.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;13. Productividad del Sistema&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -708,6 +739,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </tbody>
 </table>
 <h3 id="14-auditorias">14. Auditorías</h3>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;14. Auditorías&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -741,6 +774,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="15-usuarios-activos">15. Usuarios Activos</h3>
 <p><strong>Objetivo.</strong> Monitorear la adopcion del sistema. <strong>Como leerlo.</strong> Las tarjetas resumen el promedio diario, el pico y las sesiones totales; la serie de tiempo y las barras mensuales muestran la tendencia de uso. <strong>Decision tipica.</strong> Detectar caidas de uso que indiquen problemas de adopcion o disponibilidad.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;15. Usuarios Activos&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -774,6 +809,8 @@ a los <strong>valores oficiales del documento simulador G2</strong>:</p>
 </table>
 <h3 id="16-modulo-de-reportes-predictivos">16. Módulo de Reportes Predictivos</h3>
 <p><strong>Objetivo.</strong> Anticipar riesgos. <strong>Como leerlo.</strong> Las tarjetas alertan sobre competencias/certificaciones por vencer, cursos a programar y departamentos en riesgo; las barras muestran los departamentos de mayor riesgo; la tendencia y la tabla listan lo que vence en los proximos 60 dias. <strong>Decision tipica.</strong> Reprogramar recertificaciones y reforzar departamentos en riesgo antes de que caigan en incumplimiento.</p>
+<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;16. Módulo de Reportes Predictivos&raquo; (Grafana &rarr; localhost:3001)</span></div>
+
 <p><strong>Paneles:</strong></p>
 <table>
 <thead>
@@ -1262,6 +1299,6 @@ autenticacion por roles (Direccion, RH, Auditor, Gerente) mapeada a equipos de G
 - Grafana admin: <code>admin</code> / <code>SEE_admin_2026</code>
 - Base de datos: <code>see_db</code> / <code>see_user</code> / <code>see_pass_2026</code></p>
 <p><strong>Reproducibilidad:</strong> <code>generar_datos.py</code> regenera los datos y <code>generar_dashboards.py</code>
-regenera los 16 tableros; ambos versionados en el repositorio.</p>
+regenera los 16 tableros cuando se necesite partir de cero.</p>
 </body>
 </html>

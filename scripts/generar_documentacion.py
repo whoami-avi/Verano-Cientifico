@@ -182,8 +182,8 @@ Navegador  --HTTPS-->  Grafana 13 (OSS)  -->  PostgreSQL 15 (base see_db)
 ```
 
 - **Grafana 13 (OSS):** motor de visualizacion. Los dashboards y la fuente de datos se
-  cargan por *aprovisionamiento* (archivos versionables), lo que hace el despliegue
-  reproducible y controlado por Git.
+  cargan por *aprovisionamiento* (archivos de configuracion), lo que hace el despliegue
+  reproducible y facil de mantener.
 - **PostgreSQL 15:** almacen analitico. Cada panel ejecuta una consulta SQL directa.
 - **Docker Compose:** orquesta ambos servicios en un solo comando; incluye el plugin
   *Business Calendar* para la vista de calendario.
@@ -395,6 +395,10 @@ def main():
         key = next((k for k in INTERPRET if k in d["title"]), None)
         if key:
             cat.append(INTERPRET[key] + "\n")
+        cat.append(
+            f'<div class="captura">CAPTURA DE GRAFANA<br>'
+            f'<span>Pega aqui la imagen del tablero &laquo;{d["title"]}&raquo; '
+            f'(Grafana &rarr; localhost:3001)</span></div>\n')
         cat.append("**Paneles:**\n")
         cat.append("| Panel | Visualizacion |")
         cat.append("| :-- | :-- |")
@@ -442,7 +446,7 @@ Acceso: http://localhost:3001 (o el subpath /grafana en la nube).
 - Base de datos: `see_db` / `see_user` / `see_pass_2026`
 
 **Reproducibilidad:** `generar_datos.py` regenera los datos y `generar_dashboards.py`
-regenera los 16 tableros; ambos versionados en el repositorio.
+regenera los 16 tableros cuando se necesite partir de cero.
 """
 
     doc = "\n".join([
