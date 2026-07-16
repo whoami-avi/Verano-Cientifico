@@ -74,6 +74,8 @@ html = """<!DOCTYPE html>
   .figura { display: block; max-width: 92%; margin: 20px auto 6px; border: 1px solid #d5dee8;
             border-radius: 8px; padding: 6px; background: #fff; }
   .figpie { text-align: center; font-size: 12.5px; color: #5b6b7d; margin: 0 0 18px; font-style: italic; }
+  .shot { max-width: 100%; border: 1px solid #26374a; border-radius: 8px; padding: 0;
+          box-shadow: 0 4px 14px rgba(11,61,107,.18); background: #0f1720; }
   /* Portada */
   .portada { min-height: 92vh; display: flex; flex-direction: column; align-items: center;
              justify-content: center; text-align: center; page-break-after: always; }

@@ -85,3 +85,11 @@ empleados, 18 departamentos, 150 puestos, ~7,000 competencias y 3 años de histo
 - Verificado visualmente por screenshot (portada + diagrama renderizan correctamente).
 - Pendiente del usuario: subir sus 16 capturas de Grafana (via Drive) para incrustarlas en
   los espacios "CAPTURA DE GRAFANA".
+
+## Capturas incrustadas (2026-06)
+- Se descargaron las 16 capturas de Grafana del Drive del usuario y se guardaron en
+  /app/import_local/assets/capturas/ (01.png ... 16.png), mapeadas 1:1 al orden de tableros.
+- generar_documentacion.py ahora incrusta cada captura como <img class="figura shot"> bajo su
+  dashboard (con pie de foto) si el archivo existe; si no, deja el placeholder.
+- Documento final: portada institucional + diagrama arquitectura + 16 capturas reales + 39 KPIs
+  + 84 SQL + casos de uso. Verificado visualmente por screenshot.

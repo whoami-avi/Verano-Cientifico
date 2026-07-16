@@ -196,7 +196,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Ofrecer a la direccion una vista integral del estado del SEE en una sola pantalla. **Como leerlo.** Las tarjetas superiores resumen los cuatro indicadores clave (empleados activos, cumplimiento de competencias, avance del Plan Maestro y DDP autorizadas); los medidores muestran el semaforo global; la dona compara competentes contra brechas; las barras ordenan a los departamentos de mayor a menor cumplimiento; y la serie de tiempo evidencia la adopcion del sistema. Los filtros de Planta y Departamento permiten acotar todo el tablero. **Decision tipica.** Detectar de inmediato si algun indicador global esta en rojo y en que area concentrarse.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;01. Dashboard Ejecutivo&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/01.png" alt="01. Dashboard Ejecutivo">
+<p class="figpie">Vista del tablero &laquo;01. Dashboard Ejecutivo&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -217,7 +218,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Comparar el desempeno de los 18 departamentos. **Como leerlo.** La barra horizontal ordena de mayor a menor cumplimiento; la tabla detalla evaluaciones, competentes, brechas y porcentaje. La columna de brechas se colorea para resaltar los focos de atencion. **Decision tipica.** Priorizar apoyo a los departamentos por debajo de la meta (>= 95%).
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;02. Cumplimiento por Departamento&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/02.png" alt="02. Cumplimiento por Departamento">
+<p class="figpie">Vista del tablero &laquo;02. Cumplimiento por Departamento&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -230,7 +232,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Evaluar el desempeno entre las tres plantas. **Como leerlo.** Las barras y la tabla muestran el porcentaje por sitio; la grafica de pastel refleja la distribucion de personal. **Decision tipica.** Identificar plantas rezagadas y equilibrar recursos de capacitacion.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;03. Cumplimiento por Planta&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/03.png" alt="03. Cumplimiento por Planta">
+<p class="figpie">Vista del tablero &laquo;03. Cumplimiento por Planta&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -244,7 +247,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Analizar competencias requeridas frente a logradas. **Como leerlo.** Las barras apiladas (cifras oficiales del documento) muestran, por area normativa, las competencias cumplidas y la brecha, cuya suma es el total requerido; la tabla anade el porcentaje. Un segundo grafico apila logradas y brechas por puesto. **Decision tipica.** Enfocar cursos en las areas con mayor brecha relativa (p. ej. IATF y Lean).
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;04. Competencias por Puesto&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/04.png" alt="04. Competencias por Puesto">
+<p class="figpie">Vista del tablero &laquo;04. Competencias por Puesto&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -260,7 +264,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Localizar donde faltan competencias. **Como leerlo.** El grafico y la tabla de brechas por departamento (cifras del documento) muestran las competencias faltantes; el mapa de calor cruza departamento y tipo de competencia, coloreando las celdas con mas brechas. **Decision tipica.** Construir el Plan Maestro atacando primero las mayores concentraciones de brecha.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;05. Brechas de Competencias&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/05.png" alt="05. Brechas de Competencias">
+<p class="figpie">Vista del tablero &laquo;05. Brechas de Competencias&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -273,7 +278,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 ### 06. Diagnóstico de Necesidades (DDN)
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;06. Diagnóstico de Necesidades (DDN)&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/06.png" alt="06. Diagnóstico de Necesidades (DDN)">
+<p class="figpie">Vista del tablero &laquo;06. Diagnóstico de Necesidades (DDN)&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -289,7 +295,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Seguir la ejecucion del plan anual de capacitacion. **Como leerlo.** El cronograma lista los cursos con su semana, fechas y estatus; la dona y las barras apiladas resumen el estatus por departamento; la tabla muestra el estado de firmas por departamento y anio fiscal. **Decision tipica.** Reprogramar cursos atrasados y completar firmas pendientes.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;07. Plan Maestro de Entrenamiento&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/07.png" alt="07. Plan Maestro de Entrenamiento">
+<p class="figpie">Vista del tablero &laquo;07. Plan Maestro de Entrenamiento&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -308,7 +315,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Planear el calendario de cursos. **Como leerlo.** El Calendario ubica cada curso en su fecha; las barras muestran la carga por semana y por anio; la tabla lista los proximos cursos. **Decision tipica.** Balancear la carga de cursos a lo largo del anio y evitar semanas saturadas.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;08. Cursos Programados&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/08.png" alt="08. Cursos Programados">
+<p class="figpie">Vista del tablero &laquo;08. Cursos Programados&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -324,7 +332,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Verificar el soporte documental de la competencia. **Como leerlo.** Las tarjetas resumen evidencias cargadas, porcentaje con evidencia y competentes sin evidencia; las barras y la tabla detallan por departamento y registro. **Decision tipica.** Regularizar expedientes de competentes que aun no tienen evidencia cargada.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;09. Evidencias Digitales&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/09.png" alt="09. Evidencias Digitales">
+<p class="figpie">Vista del tablero &laquo;09. Evidencias Digitales&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -340,7 +349,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Demostrar el cumplimiento de la clausula 7.2/7.3 de IATF 16949. **Como leerlo.** Los medidores muestran el cumplimiento de competencias criticas (tipo Normativa), DDP autorizadas y planes firmados por el Gerente de Planta; la barra de medida detalla por competencia normativa; la tabla resume el estatus normativo por departamento. **Decision tipica.** Cerrar brechas normativas antes de una auditoria de certificacion.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;10. Indicadores IATF 16949&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/10.png" alt="10. Indicadores IATF 16949">
+<p class="figpie">Vista del tablero &laquo;10. Indicadores IATF 16949&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -356,7 +366,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Evidenciar el control de informacion documentada (clausula 7.5). **Como leerlo.** Los medidores y barras muestran DDP controladas/autorizadas frente a pendientes; la serie de tiempo grafica la creacion de documentos por mes. **Decision tipica.** Asegurar que el 100% de las DDP relevantes esten autorizadas y vigentes.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;11. Indicadores ISO 9001&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/11.png" alt="11. Indicadores ISO 9001">
+<p class="figpie">Vista del tablero &laquo;11. Indicadores ISO 9001&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -373,7 +384,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Auditar el flujo de firmas de las DDP. **Como leerlo.** Las tarjetas muestran el tiempo promedio de autorizacion (dias), pendientes de firma y porcentaje autorizado a tiempo; la barra compara el tiempo por departamento; la tabla detalla el flujo creada -> enviada -> autorizada con los dias transcurridos. **Decision tipica.** Agilizar las autorizaciones que exceden la meta de 3 dias.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;12. Trazabilidad de Autorizaciones&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/12.png" alt="12. Trazabilidad de Autorizaciones">
+<p class="figpie">Vista del tablero &laquo;12. Trazabilidad de Autorizaciones&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -389,7 +401,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Cuantificar el impacto de digitalizar el proceso. **Como leerlo.** Las barras comparan el tiempo (minutos) de cada proceso antes (manual) y despues (SEE); las tarjetas resumen la reduccion promedio y las horas ahorradas. **Decision tipica.** Justificar la inversion y replicar la mejora en otros procesos.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;13. Productividad del Sistema&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/13.png" alt="13. Productividad del Sistema">
+<p class="figpie">Vista del tablero &laquo;13. Productividad del Sistema&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -402,7 +415,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 ### 14. Auditorías
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;14. Auditorías&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/14.png" alt="14. Auditorías">
+<p class="figpie">Vista del tablero &laquo;14. Auditorías&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -418,7 +432,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Monitorear la adopcion del sistema. **Como leerlo.** Las tarjetas resumen el promedio diario, el pico y las sesiones totales; la serie de tiempo y las barras mensuales muestran la tendencia de uso. **Decision tipica.** Detectar caidas de uso que indiquen problemas de adopcion o disponibilidad.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;15. Usuarios Activos&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/15.png" alt="15. Usuarios Activos">
+<p class="figpie">Vista del tablero &laquo;15. Usuarios Activos&raquo; en Grafana.</p>
 
 **Paneles:**
 
@@ -434,7 +449,8 @@ La solucion entrega 16 tableros organizados en la carpeta *SEE - Sistema de Entr
 
 **Objetivo.** Anticipar riesgos. **Como leerlo.** Las tarjetas alertan sobre competencias/certificaciones por vencer, cursos a programar y departamentos en riesgo; las barras muestran los departamentos de mayor riesgo; la tendencia y la tabla listan lo que vence en los proximos 60 dias. **Decision tipica.** Reprogramar recertificaciones y reforzar departamentos en riesgo antes de que caigan en incumplimiento.
 
-<div class="captura">CAPTURA DE GRAFANA<br><span>Pega aqui la imagen del tablero &laquo;16. Módulo de Reportes Predictivos&raquo; (Grafana &rarr; localhost:3001)</span></div>
+<img class="figura shot" src="assets/capturas/16.png" alt="16. Módulo de Reportes Predictivos">
+<p class="figpie">Vista del tablero &laquo;16. Módulo de Reportes Predictivos&raquo; en Grafana.</p>
 
 **Paneles:**
 

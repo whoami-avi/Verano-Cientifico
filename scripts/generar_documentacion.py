@@ -401,10 +401,16 @@ def main():
         key = next((k for k in INTERPRET if k in d["title"]), None)
         if key:
             cat.append(INTERPRET[key] + "\n")
-        cat.append(
-            f'<div class="captura">CAPTURA DE GRAFANA<br>'
-            f'<span>Pega aqui la imagen del tablero &laquo;{d["title"]}&raquo; '
-            f'(Grafana &rarr; localhost:3001)</span></div>\n')
+        num = re.match(r"\s*(\d+)", d["title"])
+        cap = f"assets/capturas/{num.group(1)}.png" if num else None
+        if cap and os.path.exists(os.path.join("/app/import_local", cap)):
+            cat.append(f'<img class="figura shot" src="{cap}" alt="{d["title"]}">')
+            cat.append(f'<p class="figpie">Vista del tablero &laquo;{d["title"]}&raquo; en Grafana.</p>\n')
+        else:
+            cat.append(
+                f'<div class="captura">CAPTURA DE GRAFANA<br>'
+                f'<span>Pega aqui la imagen del tablero &laquo;{d["title"]}&raquo; '
+                f'(Grafana &rarr; localhost:3001)</span></div>\n')
         cat.append("**Paneles:**\n")
         cat.append("| Panel | Visualizacion |")
         cat.append("| :-- | :-- |")
